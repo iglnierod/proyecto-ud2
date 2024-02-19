@@ -1,9 +1,12 @@
 package model.database;
 
+import model.book.Book;
+
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database implements Serializable {
     @Serial
@@ -30,6 +33,7 @@ public class Database implements Serializable {
         createConfigFile();
     }
 
+    // METHODS
     private void createConfigFile() {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(CONFIG_FILE))) {
             objectOutputStream.writeObject(this);
@@ -58,7 +62,10 @@ public class Database implements Serializable {
 
     public Connection getConnection() {
         String url = String.format("jdbc:mysql://%s:%d/%s", getHost(), getPort(), getDatabaseName());
-        try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
+        try {
+            Connection con = DriverManager.getConnection(url, getUser(), getPassword());
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("USE " + getDatabaseName());
             return con;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,6 +73,7 @@ public class Database implements Serializable {
         return null;
     }
 
+    // GETTERS & SETTERS
     public String getHost() {
         return host;
     }

@@ -64,9 +64,17 @@ public class AddBookView extends JDialog {
 
         JButton btnAddBook = new JButton("Aceptar");
         btnAddBook.addActionListener(e -> {
-            /**
-             * completar
-             */
+            String bookTitle = titleField.getText();
+            String bookAuthor = authorField.getText();
+            if (bookTitle.isEmpty() || bookAuthor.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No puede haber campos vacíos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!Controller.addBook(bookTitle, bookAuthor)) {
+                JOptionPane.showMessageDialog(this, "No se ha podido añadir el libro", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             this.dispose();
         });
         southPanel.add(btnAddBook, BorderLayout.EAST);

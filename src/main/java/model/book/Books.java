@@ -1,5 +1,8 @@
 package model.book;
 
+import utils.ANSI;
+import utils.Util;
+
 import java.util.HashMap;
 
 public class Books {
@@ -16,7 +19,10 @@ public class Books {
     // METHODS
     public void add(Book book) {
         this.books.put(book.getId(), book);
+        ANSI.printPurpleBg(book.toString());
     }
+
+    public void add(String bookTitle, String bookAuthor) {}
 
     public void remove(int bookID){
         this.books.remove(bookID);
