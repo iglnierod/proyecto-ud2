@@ -13,7 +13,7 @@ public class Controller {
     private static Database database;
 
     private Controller() {
-        database = new Database();
+        database = Database.loadConfigFile();
     }
 
     public static Controller getInstance() {
@@ -24,9 +24,10 @@ public class Controller {
         ANSI.printBlue("Controller.start()");
         MainView mainView = new MainView(this);
         mainView.setVisible(true);
-        if (!database.configFileExists()) {
+        if (!database.isConfigLoaded()) {
             new DatabaseConfigView(mainView, this).setVisible(true);
         }
+        //System.out.println(database);
     }
 
     public static void setMySqlConfig(String host, int port, String user, String password, String databaseName) {
