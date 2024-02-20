@@ -3,6 +3,8 @@ package model.book;
 import utils.ANSI;
 import utils.Util;
 
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Books {
@@ -10,6 +12,12 @@ public class Books {
 
     public Books() {
         books = new HashMap<>();
+    }
+
+    public void load(ArrayList<Book> booksList) {
+        for(Book b : booksList) {
+            books.put(b.getId(), b);
+        }
     }
 
     public Books(HashMap<Integer, Book> books) {
@@ -22,9 +30,10 @@ public class Books {
         ANSI.printPurpleBg(book.toString());
     }
 
-    public void add(String bookTitle, String bookAuthor) {}
+    public void add(String bookTitle, String bookAuthor) {
+    }
 
-    public void remove(int bookID){
+    public void remove(int bookID) {
         this.books.remove(bookID);
     }
 
@@ -35,5 +44,19 @@ public class Books {
             sb.append(b).append("\n");
         }
         return sb.toString();
+    }
+
+    public DefaultTableModel getAvailableBooksTableModel() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Título");
+        model.addColumn("Autor/a");
+
+        for (Book b : books.values()) {
+            String[] bookArray = {String.valueOf(b.getId()), b.getTitle(), b.getAuthor()};
+            model.addRow(bookArray);
+        }
+
+        return model;
     }
 }

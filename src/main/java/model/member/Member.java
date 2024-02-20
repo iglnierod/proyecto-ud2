@@ -5,6 +5,8 @@ public class Member {
     private String name;
     private String email;
 
+    public Member() {}
+
     public Member(String id, String name, String email) {
         this.id = id;
         this.name = name;

@@ -1,7 +1,10 @@
 package view;
 
 import controller.Controller;
-import view.book.*;
+import view.book.AddBookView;
+import view.book.AvailableBooksView;
+import view.book.ImportTrendingBooksView;
+import view.book.RentedBooksView;
 import view.layout.NativeLayout;
 import view.member.AddMemberView;
 import view.member.MemberListView;
@@ -9,18 +12,13 @@ import view.rent.EndRentView;
 import view.rent.RentHistoryView;
 import view.rent.StartRentView;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
 
 public class MainView extends JFrame {
     private JButton btnRentBook;

@@ -13,6 +13,8 @@ import utils.ANSI;
 import view.DatabaseConfigView;
 import view.MainView;
 
+import javax.swing.table.DefaultTableModel;
+
 
 public class Controller {
     private static final Controller MAIN_CONTROLLER = new Controller();
@@ -41,6 +43,8 @@ public class Controller {
         }
         bookDAO = new BookDAOMySQL(database.getConnection());
         memberDAO = new MemberDAOMySQL(database.getConnection());
+        books.load(bookDAO.getAll());
+        members.load(memberDAO.getAll());
     }
 
     public static void setMySqlConfig(String host, int port, String user, String password, String databaseName) {
@@ -66,5 +70,15 @@ public class Controller {
             return true;
         }
         return false;
+    }
+
+    // Use case: view available books
+    public static DefaultTableModel getAvailableBooksTableModel() {
+        return books.getAvailableBooksTableModel();
+    }
+
+    // Use case: view members
+    public static DefaultTableModel getMembersTableModel() {
+        return members.getAvailableBooksTableModel();
     }
 }

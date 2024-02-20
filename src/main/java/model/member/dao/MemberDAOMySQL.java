@@ -1,5 +1,6 @@
 package model.member.dao;
 
+import model.book.Book;
 import model.member.Member;
 
 import java.sql.*;
@@ -14,7 +15,23 @@ public class MemberDAOMySQL implements MemberDAO {
 
     @Override
     public ArrayList<Member> getAll() {
-        return null;
+        String query = "SELECT * FROM members";
+        ArrayList<Member> membersList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Member m = new Member();
+                m.setId(rs.getString("id"));
+                m.setName(rs.getString("name"));
+                m.setEmail(rs.getString("email"));
+
+                membersList.add(m);
+            }
+            return membersList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
