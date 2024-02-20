@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public interface BookDAO {
     public ArrayList<Book> getAll();
 
+    public ArrayList<Book> getAvailable();
     public Book getById(int id);
 
     public boolean create(Book book);

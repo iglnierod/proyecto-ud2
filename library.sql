@@ -23,7 +23,7 @@ CREATE TABLE rents(
 	id_book INT,
 	id_member VARCHAR(9),
 	beginning TIMESTAMP NOT NULL,
-	ending TIMESTAMP,
+	ending TIMESTAMP DEFAULT NULL,
 
 	FOREIGN KEY(id_book) REFERENCES books(id),
 	FOREIGN KEY(id_member) REFERENCES members(id)

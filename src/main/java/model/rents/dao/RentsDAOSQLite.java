@@ -18,7 +18,7 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public Rent getById(int uuid) {
+    public Rent getById(String uuid) {
         return null;
     }
 
@@ -28,8 +28,8 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public void update(Rent rent) {
-
+    public boolean end(String uuid) {
+        return false;
     }
 
     @Override

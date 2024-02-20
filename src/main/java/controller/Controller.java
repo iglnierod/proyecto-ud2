@@ -19,7 +19,6 @@ import view.MainView;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
 
 public class Controller {
@@ -40,6 +39,7 @@ public class Controller {
         database = Database.loadConfigFile();
         books = new Books();
         members = new Members();
+        rents = new Rents();
     }
 
     public static Controller getInstance() {
@@ -58,6 +58,7 @@ public class Controller {
         rentsDAO = new RentsDAOMySQL(database.getConnection());
         books.load(bookDAO.getAll());
         members.load(memberDAO.getAll());
+        rents.load(rentsDAO.getAll());
     }
 
     public static void setMySqlConfig(String host, int port, String user, String password, String databaseName) {
@@ -87,7 +88,10 @@ public class Controller {
 
     // Use case: view available books
     public static DefaultTableModel getAvailableBooksTableModel() {
-        return books.getAvailableBooksTableModel();
+        return books.getAvailableBooksTableModel(bookDAO.getAvailable());
+    }
+    public static DefaultTableModel getAllBooksTableModel() {
+        return books.getAllBooksTableModel();
     }
 
     // Use case: view members
@@ -109,6 +113,13 @@ public class Controller {
         Rent rent = new Rent(selectedBookID, selectedMemberID, now, null);
         if (rentsDAO.create(rent)) {
             rents.add(rent);
+        }
+    }
+
+    // Use case: end rent
+    public static void endRent(String uuid) {
+        if(rents.exists(uuid)) {
+
         }
     }
 }

@@ -34,6 +34,28 @@ public class BookDAOMySQL implements BookDAO {
     }
 
     @Override
+    public ArrayList<Book> getAvailable() {
+        String query = "SELECT * FROM books WHERE id NOT IN (" +
+                "SELECT id_book FROM rents WHERE ending = '2001-01-01 00:00:00' ORDER BY beginning DESC);\n";
+        ArrayList<Book> booksList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Book b = new Book();
+                b.setId(rs.getInt("id"));
+                b.setTitle(rs.getString("title"));
+                b.setAuthor(rs.getString("author"));
+
+                booksList.add(b);
+            }
+            return booksList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public Book getById(int id) {
         return null;
     }

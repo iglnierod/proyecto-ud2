@@ -1,5 +1,6 @@
 package model.rents.dao;
 
+import model.book.Book;
 import model.rents.Rent;
 
 import java.sql.*;
@@ -14,11 +15,29 @@ public class RentsDAOMySQL implements RentsDAO {
 
     @Override
     public ArrayList<Rent> getAll() {
-        return null;
+        String query = "SELECT * FROM rents";
+        ArrayList<Rent> rentsList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Rent r = new Rent();
+                r.setUuid(rs.getString("uuid"));
+                r.setBookID(rs.getInt("id_book"));
+                r.setMemberID(rs.getString("id_member"));
+                r.setBeginningDate(rs.getString("beginning"));
+                r.setEndingDate(rs.getString("ending"));
+
+                rentsList.add(r);
+            }
+            return rentsList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public Rent getById(int uuid) {
+    public Rent getById(String uuid) {
         return null;
     }
 
@@ -29,10 +48,10 @@ public class RentsDAOMySQL implements RentsDAO {
             ps.setString(1, rent.getUuid());
             ps.setInt(2, rent.getBookID());
             ps.setString(3, rent.getMemberID());
-            ps.setTimestamp(4, java.sql.Timestamp.valueOf(rent.getBeginningDate()));
-            ps.setTimestamp(5, java.sql.Timestamp.valueOf(rent.getEndingDate()));
-
+            ps.setString(4, rent.getBeginningDate());
+            ps.setString(5, rent.getEndingDate());
             ps.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,8 +60,19 @@ public class RentsDAOMySQL implements RentsDAO {
     }
 
     @Override
-    public void update(Rent rent) {
+    public boolean end(String uuid) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        String query = "UPDATE rents SET ending = ? WHERE uuid = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(query)) {
+            ps.setString(1, now.toString());
+            ps.setString(2, uuid);
 
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

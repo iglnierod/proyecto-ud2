@@ -12,6 +12,7 @@ public class Database implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    public static final String DEFAULT_TIMESTAMP = "2001-01-01 00:00:00";
     private String host;
     private int port;
     private String user;

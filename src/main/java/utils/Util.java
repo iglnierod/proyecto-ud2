@@ -1,5 +1,7 @@
 package utils;
 
+import model.database.Database;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -14,7 +16,7 @@ public class Util {
 
     public static String formatDate(Timestamp timestamp) {
         if (timestamp == null) {
-            return "";
+            return Database.DEFAULT_TIMESTAMP;
         }
         LocalDateTime datetime = timestamp.toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -31,7 +33,7 @@ public class Util {
     public static Date convertStringToDate(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            if(dateString == null){
+            if (dateString == null) {
                 return null;
             }
             java.util.Date parsedDate = dateFormat.parse(dateString);

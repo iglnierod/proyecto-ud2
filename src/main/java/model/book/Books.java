@@ -1,7 +1,6 @@
 package model.book;
 
 import utils.ANSI;
-import utils.Util;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class Books {
     }
 
     public void load(ArrayList<Book> booksList) {
-        for(Book b : booksList) {
+        for (Book b : booksList) {
             books.put(b.getId(), b);
         }
     }
@@ -46,13 +45,27 @@ public class Books {
         return sb.toString();
     }
 
-    public DefaultTableModel getAvailableBooksTableModel() {
+    public DefaultTableModel getAllBooksTableModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
         model.addColumn("Título");
         model.addColumn("Autor/a");
 
         for (Book b : books.values()) {
+            String[] bookArray = {String.valueOf(b.getId()), b.getTitle(), b.getAuthor()};
+            model.addRow(bookArray);
+        }
+
+        return model;
+    }
+
+    public DefaultTableModel getAvailableBooksTableModel(ArrayList<Book> bookList) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Título");
+        model.addColumn("Autor/a");
+
+        for (Book b : bookList) {
             String[] bookArray = {String.valueOf(b.getId()), b.getTitle(), b.getAuthor()};
             model.addRow(bookArray);
         }

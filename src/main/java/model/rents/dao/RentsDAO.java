@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public interface RentsDAO {
     public ArrayList<Rent> getAll();
 
-    public Rent getById(int uuid);
+    public Rent getById(String uuid);
 
     public boolean create(Rent rent);
 
-    public void update(Rent rent);
+    public boolean end(String uuid);
 
     public void delete(Rent rent);
 }

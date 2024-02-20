@@ -1,8 +1,6 @@
 package view.rent;
 
 import controller.Controller;
-import model.book.Book;
-import utils.ANSI;
 import view.layout.NativeLayout;
 
 import javax.swing.*;
@@ -80,7 +78,6 @@ public class StartRentView extends JDialog {
                     return;
                 }
                 String selectedBook = model.getValueAt(selectedRow, 0).toString();
-                ANSI.printPurpleBg("Selected bookID: " + selectedBook);
                 Controller.setSelectedBookID(Integer.parseInt(selectedBook));
 
                 table2();
@@ -97,7 +94,6 @@ public class StartRentView extends JDialog {
                     return;
                 }
                 String selectedMember = model.getValueAt(selectedRow, 0).toString();
-                ANSI.printPurpleBg("Selected memberID: " + selectedMember);
                 Controller.setSelectedMemberID(selectedMember);
                 Controller.rentBook();
                 this.dispose();
@@ -127,7 +123,6 @@ public class StartRentView extends JDialog {
             String[][] data = new String[0][0]; // Completar con libros
             booksTable = new JTable(data, booksColumnNames);
             booksTable.setModel(Controller.getAvailableBooksTableModel());
-            System.out.println("booksTable.setModel(Controller.getAvailableBooksTableModel());");
             booksTable.setDefaultEditor(Object.class, null);
         } catch (Exception e) {
             e.printStackTrace();
