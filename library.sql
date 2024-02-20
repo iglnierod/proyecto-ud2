@@ -22,8 +22,8 @@ CREATE TABLE rents(
 	uuid VARCHAR(150) PRIMARY KEY,
 	id_book INT,
 	id_member VARCHAR(9),
-	beginning DATE NOT NULL,
-	ending DATE,
+	beginning TIMESTAMP NOT NULL,
+	ending TIMESTAMP,
 
 	FOREIGN KEY(id_book) REFERENCES books(id),
 	FOREIGN KEY(id_member) REFERENCES members(id)

@@ -59,4 +59,8 @@ public class Books {
 
         return model;
     }
+
+    public Book get(int id) {
+        return this.books.get(id);
+    }
 }

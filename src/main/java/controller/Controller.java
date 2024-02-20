@@ -9,11 +9,17 @@ import model.member.Member;
 import model.member.Members;
 import model.member.dao.MemberDAO;
 import model.member.dao.MemberDAOMySQL;
+import model.rents.Rent;
+import model.rents.Rents;
+import model.rents.dao.RentsDAO;
+import model.rents.dao.RentsDAOMySQL;
 import utils.ANSI;
 import view.DatabaseConfigView;
 import view.MainView;
 
 import javax.swing.table.DefaultTableModel;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 
 public class Controller {
@@ -23,6 +29,12 @@ public class Controller {
     private static BookDAO bookDAO;
     private static Members members;
     private static MemberDAO memberDAO;
+
+    private static Rents rents;
+    private static RentsDAO rentsDAO;
+    //
+    private static int selectedBookID;
+    private static String selectedMemberID;
 
     private Controller() {
         database = Database.loadConfigFile();
@@ -43,6 +55,7 @@ public class Controller {
         }
         bookDAO = new BookDAOMySQL(database.getConnection());
         memberDAO = new MemberDAOMySQL(database.getConnection());
+        rentsDAO = new RentsDAOMySQL(database.getConnection());
         books.load(bookDAO.getAll());
         members.load(memberDAO.getAll());
     }
@@ -80,5 +93,22 @@ public class Controller {
     // Use case: view members
     public static DefaultTableModel getMembersTableModel() {
         return members.getAvailableBooksTableModel();
+    }
+
+    // Use case: rent book
+    public static void setSelectedBookID(int selectedBookID) {
+        Controller.selectedBookID = selectedBookID;
+    }
+
+    public static void setSelectedMemberID(String selectedMemberID) {
+        Controller.selectedMemberID = selectedMemberID;
+    }
+
+    public static void rentBook() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        Rent rent = new Rent(selectedBookID, selectedMemberID, now, null);
+        if (rentsDAO.create(rent)) {
+            rents.add(rent);
+        }
     }
 }

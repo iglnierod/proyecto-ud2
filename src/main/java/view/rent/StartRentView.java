@@ -1,10 +1,13 @@
 package view.rent;
 
 import controller.Controller;
+import model.book.Book;
+import utils.ANSI;
 import view.layout.NativeLayout;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class StartRentView extends JDialog {
@@ -18,6 +21,7 @@ public class StartRentView extends JDialog {
     private Controller controller;
     private JFrame parent;
     private int step;
+
     public StartRentView(JFrame frame, Controller controller) {
         super(frame);
         NativeLayout.set();
@@ -46,7 +50,7 @@ public class StartRentView extends JDialog {
 
     private void header() {
         JPanel northPanel = new JPanel();
-        northPanel.setLayout(new BoxLayout(northPanel,BoxLayout.Y_AXIS));
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
         add(northPanel, BorderLayout.NORTH);
 
         JLabel lblRent = new JLabel("Iniciar préstamo de libro");
@@ -68,15 +72,34 @@ public class StartRentView extends JDialog {
 
         JButton btnRent = new JButton("Siguiente");
         btnRent.addActionListener(e -> {
-            if(step == 1) {
+            if (step == 1) {
+                DefaultTableModel model = (DefaultTableModel) booksTable.getModel();
+                int selectedRow = booksTable.getSelectedRow();
+                if(selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this,"Seleccione un libro","ERROR",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String selectedBook = model.getValueAt(selectedRow, 0).toString();
+                ANSI.printPurpleBg("Selected bookID: " + selectedBook);
+                Controller.setSelectedBookID(Integer.parseInt(selectedBook));
+
                 table2();
                 lblRent2.setText("Selecciona el socio que realiza el préstamo:");
                 btnRent.setText("Aceptar");
                 step = 2;
                 return;
             }
-            if(step == 2) {
-
+            if (step == 2) {
+                DefaultTableModel model = (DefaultTableModel) membersTable.getModel();
+                int selectedRow = membersTable.getSelectedRow();
+                if(selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this,"Seleccione un miembro","ERROR",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String selectedMember = model.getValueAt(selectedRow, 0).toString();
+                ANSI.printPurpleBg("Selected memberID: " + selectedMember);
+                Controller.setSelectedMemberID(selectedMember);
+                Controller.rentBook();
                 this.dispose();
             }
         });
@@ -100,9 +123,11 @@ public class StartRentView extends JDialog {
         contentPane.add(scrollPane);
 
         try {
-            booksColumnNames = new String[] { "ID", "Título", "Autor/a" };
+            booksColumnNames = new String[]{"ID", "Título", "Autor/a"};
             String[][] data = new String[0][0]; // Completar con libros
             booksTable = new JTable(data, booksColumnNames);
+            booksTable.setModel(Controller.getAvailableBooksTableModel());
+            System.out.println("booksTable.setModel(Controller.getAvailableBooksTableModel());");
             booksTable.setDefaultEditor(Object.class, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,9 +151,10 @@ public class StartRentView extends JDialog {
 
 
         try {
-            membersColumnNames = new String[] { "DNI", "Nombre", "Email" };
+            membersColumnNames = new String[]{"DNI", "Nombre", "Email"};
             String[][] data = new String[0][0]; // Completar con socios
             membersTable = new JTable(data, membersColumnNames);
+            membersTable.setModel(Controller.getMembersTableModel());
             membersTable.setDefaultEditor(Object.class, null);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,9 @@
 package model.rents;
 
 import org.mindrot.jbcrypt.BCrypt;
+import utils.Util;
+
+import java.sql.Timestamp;
 
 public class Rent {
     private String uuid;
@@ -13,17 +16,35 @@ public class Rent {
 
     }
 
+    public Rent(int bookID, String memberID, Timestamp beginningDate, Timestamp endingDate) {
+        this.bookID = bookID;
+        this.memberID = memberID;
+        this.beginningDate = Util.formatDate(beginningDate);
+        this.endingDate = Util.formatDate(endingDate);
+        this.uuid = encrypt(this.bookID + this.memberID);
+    }
+
     public Rent(int bookID, String memberID, String beginningDate, String endingDate) {
         this.bookID = bookID;
         this.memberID = memberID;
         this.beginningDate = beginningDate;
         this.endingDate = endingDate;
-        this.uuid = encrypt(this.bookID + this.memberID);
     }
 
     // METHODS
     private String encrypt(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    @Override
+    public String toString() {
+        return "Rent{" +
+                "uuid='" + uuid + '\'' +
+                ", bookID=" + bookID +
+                ", memberID='" + memberID + '\'' +
+                ", beginningDate='" + beginningDate + '\'' +
+                ", endingDate='" + endingDate + '\'' +
+                '}';
     }
 
     // GETTERS & SETTERS
