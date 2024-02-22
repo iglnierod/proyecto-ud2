@@ -130,7 +130,12 @@ public class Controller {
     }
 
     // Use case: view not available books
+    public static DefaultTableModel getNotAvailableBooksTableModel() {
+        return books.getNotAvailableBooksTableModel(bookDAO.getNotAvailable());
+    }
+
+    // Use case: view rented history
     public static DefaultTableModel getRentedHistoryTableModel() {
-        return rents.getRentedHistory(bookDAO.getRented());
+        return rents.getRentedHistory(rentsDAO.getHistory());
     }
 }

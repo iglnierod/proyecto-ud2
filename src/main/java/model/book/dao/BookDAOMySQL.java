@@ -1,6 +1,7 @@
 package model.book.dao;
 
 import model.book.Book;
+import model.database.Database;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -56,30 +57,20 @@ public class BookDAOMySQL implements BookDAO {
     }
 
     @Override
-    public ArrayList<ArrayList<String>> getRented() {
-        String query = "SELECT r.uuid, b.id, b.title, b.author, m.id, m.name, m.email, r.beginning, r.ending\n" +
-                "FROM rents r\n" +
-                "JOIN books b ON r.id_book = b.id\n" +
-                "JOIN members m ON r.id_member = m.id\n" +
-                "ORDER BY r.beginning ASC;";
-        ArrayList<ArrayList<String>> rentedList = new ArrayList<>();
+    public ArrayList<Book> getNotAvailable() {
+        String query = String.format("SELECT * FROM books WHERE id IN (SELECT id_book FROM rents WHERE ending = '%s')", Database.DEFAULT_TIMESTAMP);
+        ArrayList<Book> booksList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                ArrayList<String> rentedItem = new ArrayList<>();
-                rentedItem.add(rs.getString("uuid"));
-                rentedItem.add(String.valueOf(rs.getInt("id")));
-                rentedItem.add(rs.getString("title"));
-                rentedItem.add(rs.getString("author"));
-                rentedItem.add(String.valueOf(rs.getInt("id")));
-                rentedItem.add(rs.getString("name"));
-                rentedItem.add(rs.getString("email"));
-                rentedItem.add(rs.getString("beginning"));
-                rentedItem.add(rs.getString("ending"));
+                Book b = new Book();
+                b.setId(rs.getInt("id"));
+                b.setTitle(rs.getString("title"));
+                b.setAuthor(rs.getString("author"));
 
-                rentedList.add(rentedItem);
+                booksList.add(b);
             }
-            return rentedList;
+            return booksList;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

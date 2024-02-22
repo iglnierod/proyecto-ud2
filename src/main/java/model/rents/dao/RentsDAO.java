@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public interface RentsDAO {
     public ArrayList<Rent> getAll();
 
-    public ArrayList<Rent> getHistory();
+    public ArrayList<ArrayList<String>> getHistory();
 
     public Rent getById(String uuid);
 

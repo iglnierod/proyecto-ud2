@@ -20,6 +20,7 @@ public class Database implements Serializable {
     private String databaseName;
     private static final File CONFIG_FILE = new File("config.bin");
     private boolean configLoaded;
+    private File SQLiteDatabase;
 
     public Database() {
 

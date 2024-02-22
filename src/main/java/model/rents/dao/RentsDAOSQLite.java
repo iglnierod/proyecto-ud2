@@ -19,7 +19,7 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public ArrayList<Rent> getHistory() {
+    public ArrayList<ArrayList<String>> getHistory() {
         return null;
     }
 

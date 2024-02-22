@@ -9,7 +9,7 @@ public interface BookDAO {
 
     public ArrayList<Book> getAvailable();
 
-    public ArrayList<ArrayList<String>> getRented();
+    public ArrayList<Book> getNotAvailable();
 
     public Book getById(int id);
 

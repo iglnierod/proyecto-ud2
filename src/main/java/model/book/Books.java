@@ -73,7 +73,7 @@ public class Books {
         return model;
     }
 
-    public DefaultTableModel getRentedBooksTableModel(ArrayList<Book> bookList) {
+    public DefaultTableModel getNotAvailableBooksTableModel(ArrayList<Book> bookList) {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
         model.addColumn("Título");
