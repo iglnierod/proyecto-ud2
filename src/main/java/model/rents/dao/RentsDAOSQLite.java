@@ -3,6 +3,7 @@ package model.rents.dao;
 import model.rents.Rent;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class RentsDAOSQLite implements RentsDAO {
@@ -18,6 +19,11 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
+    public ArrayList<Rent> getHistory() {
+        return null;
+    }
+
+    @Override
     public Rent getById(String uuid) {
         return null;
     }
@@ -28,7 +34,7 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public boolean end(String uuid) {
+    public boolean end(String uuid, Timestamp now) {
         return false;
     }
 

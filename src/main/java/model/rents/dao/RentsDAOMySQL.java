@@ -1,6 +1,5 @@
 package model.rents.dao;
 
-import model.book.Book;
 import model.rents.Rent;
 
 import java.sql.*;
@@ -15,6 +14,29 @@ public class RentsDAOMySQL implements RentsDAO {
 
     @Override
     public ArrayList<Rent> getAll() {
+        String query = "SELECT * FROM rents";
+        ArrayList<Rent> rentsList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Rent r = new Rent();
+                r.setUuid(rs.getString("uuid"));
+                r.setBookID(rs.getInt("id_book"));
+                r.setMemberID(rs.getString("id_member"));
+                r.setBeginningDate(rs.getString("beginning"));
+                r.setEndingDate(rs.getString("ending"));
+
+                rentsList.add(r);
+            }
+            return rentsList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Rent> getHistory() {
         String query = "SELECT * FROM rents";
         ArrayList<Rent> rentsList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
@@ -60,8 +82,8 @@ public class RentsDAOMySQL implements RentsDAO {
     }
 
     @Override
-    public boolean end(String uuid) {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
+    public boolean end(String uuid, Timestamp now) {
+
         String query = "UPDATE rents SET ending = ? WHERE uuid = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setString(1, now.toString());
@@ -79,4 +101,6 @@ public class RentsDAOMySQL implements RentsDAO {
     public void delete(Rent rent) {
 
     }
+
+
 }

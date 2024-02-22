@@ -8,6 +8,9 @@ public interface BookDAO {
     public ArrayList<Book> getAll();
 
     public ArrayList<Book> getAvailable();
+
+    public ArrayList<ArrayList<String>> getRented();
+
     public Book getById(int id);
 
     public boolean create(Book book);

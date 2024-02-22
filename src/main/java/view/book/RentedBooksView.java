@@ -41,7 +41,7 @@ public class RentedBooksView extends JDialog {
             columnNames = new String[] { "ID", "Título", "Autor/a" };
             String[][] data = new String[0][0];
             table = new JTable(data, columnNames);
-
+            table.setModel(Controller.getRentedHistoryTableModel());
             table.setBounds(30,40,200,300);
             table.setDefaultEditor(Object.class, null);
             table.setRowSelectionAllowed(false);

@@ -90,6 +90,7 @@ public class Controller {
     public static DefaultTableModel getAvailableBooksTableModel() {
         return books.getAvailableBooksTableModel(bookDAO.getAvailable());
     }
+
     public static DefaultTableModel getAllBooksTableModel() {
         return books.getAllBooksTableModel();
     }
@@ -117,9 +118,19 @@ public class Controller {
     }
 
     // Use case: end rent
-    public static void endRent(String uuid) {
-        if(rents.exists(uuid)) {
-
+    public static boolean endRent(String uuid) {
+        if (rents.exists(uuid) && rents.get(uuid).getEndingDate().equals(Database.DEFAULT_TIMESTAMP)) {
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            if (rentsDAO.end(uuid, now)) {
+                rents.get(uuid).setEndingDate(now.toString());
+                return true;
+            }
         }
+        return false;
+    }
+
+    // Use case: view not available books
+    public static DefaultTableModel getRentedHistoryTableModel() {
+        return rents.getRentedHistory(bookDAO.getRented());
     }
 }

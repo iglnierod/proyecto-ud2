@@ -73,7 +73,23 @@ public class Books {
         return model;
     }
 
+    public DefaultTableModel getRentedBooksTableModel(ArrayList<Book> bookList) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Título");
+        model.addColumn("Autor/a");
+
+        for (Book b : bookList) {
+            String[] bookArray = {String.valueOf(b.getId()), b.getTitle(), b.getAuthor()};
+            model.addRow(bookArray);
+        }
+
+        return model;
+    }
+
     public Book get(int id) {
         return this.books.get(id);
     }
+
+
 }

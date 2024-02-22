@@ -42,10 +42,10 @@ public class RentHistoryView extends JDialog {
         try {
             columnNames = new String[] { "UUID", "ID", "Título", "Autor/a", "DNI", "Nombre", "Correo electrónico", "Fecha inicio", "Fecha fin" };
             String[][] data = new String[0][0];
-
             table = new JTable(data, columnNames);
             table.setBounds(30,40,200,300);
             table.setDefaultEditor(Object.class, null);
+            table.setModel(Controller.getRentedHistoryTableModel());
         } catch (Exception e) {
             e.printStackTrace();
             return;
