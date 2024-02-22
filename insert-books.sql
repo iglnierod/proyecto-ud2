@@ -8,7 +8,7 @@ INSERT INTO books (title, author) VALUES ('One Hundred Years of Solitude', 'Gabr
 INSERT INTO books (title, author) VALUES ('The Lord of the Rings', 'J.R.R. Tolkien');
 
 -- 4. Harry Potter and the Sorcerer's Stone by J.K. Rowling
-INSERT INTO books (title, author) VALUES ('Harry Potter and the Sorcerer\'s Stone', 'J.K. Rowling');
+INSERT INTO books (title, author) VALUES ("Harry Potter and the Sorcerer's Stone", 'J.K. Rowling');
 
 -- 5. The Great Gatsby by F. Scott Fitzgerald
 INSERT INTO books (title, author) VALUES ('The Great Gatsby', 'F. Scott Fitzgerald');
@@ -20,13 +20,13 @@ INSERT INTO books (title, author) VALUES ('Frankenstein', 'Mary Shelley');
 INSERT INTO books (title, author) VALUES ('Pride and Prejudice', 'Jane Austen');
 
 -- 8. The Handmaid's Tale by Margaret Atwood
-INSERT INTO books (title, author) VALUES ('The Handmaid\'s Tale', 'Margaret Atwood');
+INSERT INTO books (title, author) VALUES ("The Handmaid's Tale", 'Margaret Atwood');
 
 -- 9. 1984 by George Orwell
 INSERT INTO books (title, author) VALUES ('1984', 'George Orwell');
 
 -- 10. The Hitchhiker's Guide to the Galaxy by Douglas Adams
-INSERT INTO books (title, author) VALUES ('The Hitchhiker\'s Guide to the Galaxy', 'Douglas Adams');
+INSERT INTO books (title, author) VALUES ("The Hitchhiker's Guide to the Galaxy", 'Douglas Adams');
 
 -- 11. The Martian by Andy Weir
 INSERT INTO books (title, author) VALUES ('The Martian', 'Andy Weir');
@@ -47,7 +47,7 @@ INSERT INTO books (title, author) VALUES ('The Midnight Library', 'Matt Haig');
 INSERT INTO books (title, author) VALUES ('Sapiens: A Brief History of Humankind', 'Yuval Noah Harari');
 
 -- 17. Factfulness: Ten Reasons We're Wrong About the World - and Why Things Are Better Than You Think by Hans Rosling
-INSERT INTO books (title, author) VALUES ('Factfulness: Ten Reasons We\'re Wrong About the World - and Why Things Are Better Than You Think', 'Hans Rosling');
+INSERT INTO books (title, author) VALUES ("Factfulness: Ten Reasons We're Wrong About the World - and Why Things Are Better Than You Think", 'Hans Rosling');
 
 -- 18. Invisible Women: Data Bias in a World Designed for Men by Caroline Criado Perez
 INSERT INTO books (title, author) VALUES ('Invisible Women: Data Bias in a World Designed for Men', 'Caroline Criado Perez');

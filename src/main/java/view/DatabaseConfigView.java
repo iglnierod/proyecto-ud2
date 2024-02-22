@@ -20,6 +20,7 @@ public class DatabaseConfigView extends JFrame {
     private JLabel sqliteLabel;
     private JButton btnSqlite;
     private Controller controller;
+    private Engine selectedEngine;
 
     public DatabaseConfigView(JFrame parent, Controller controller) {
         super(System.getenv("APP_NAME"));
@@ -89,10 +90,13 @@ public class DatabaseConfigView extends JFrame {
                 String password = passwordField.getText();
                 String databaseName = dbNameField.getText();
 
+                selectedEngine = Engine.mysql;
                 Controller.setMySqlConfig(host, port, user, password, databaseName);
             }
 
             if (engine.equals("sqlite")) {
+                selectedEngine = Engine.sqlite;
+                Controller.setSQLiteConfig(new File(sqlitePathFile));
             }
 
             this.dispose();
@@ -185,13 +189,14 @@ public class DatabaseConfigView extends JFrame {
         sqliteLabel = new JLabel("No hay ningún fichero elegido");
 
         btnSqlite.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser(new File("").getAbsolutePath());
             fileChooser.setSelectedFile(new File("biblioteca.sqlite"));
             int returnValue = fileChooser.showOpenDialog(null);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 java.io.File selectedFile = fileChooser.getSelectedFile();
                 sqlitePathFile = selectedFile.getAbsolutePath();
+                sqliteLabel.setText(sqlitePathFile);
                 System.out.println("Archivo seleccionado: " + sqlitePathFile);
             }
         });
@@ -199,5 +204,9 @@ public class DatabaseConfigView extends JFrame {
         panel.add(sqliteLabel);
         panel.add(btnSqlite);
         return panel;
+    }
+
+    public Engine getSelectedEngine() {
+        return this.selectedEngine;
     }
 }

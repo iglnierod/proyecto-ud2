@@ -4,20 +4,24 @@ import model.book.Book;
 import model.book.Books;
 import model.book.dao.BookDAO;
 import model.book.dao.BookDAOMySQL;
+import model.book.dao.BookDAOSQLite;
 import model.database.Database;
 import model.member.Member;
 import model.member.Members;
 import model.member.dao.MemberDAO;
 import model.member.dao.MemberDAOMySQL;
+import model.member.dao.MemberDAOSQLite;
 import model.rents.Rent;
 import model.rents.Rents;
 import model.rents.dao.RentsDAO;
 import model.rents.dao.RentsDAOMySQL;
+import model.rents.dao.RentsDAOSQLite;
 import utils.ANSI;
 import view.DatabaseConfigView;
 import view.MainView;
 
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
 import java.sql.Timestamp;
 
 
@@ -50,20 +54,36 @@ public class Controller {
         ANSI.printBlue("Controller.start()");
         MainView mainView = new MainView(this);
         mainView.setVisible(true);
+        DatabaseConfigView configView = new DatabaseConfigView(mainView, this);
         if (!database.isConfigLoaded()) {
-            new DatabaseConfigView(mainView, this).setVisible(true);
+            configView.setVisible(true);
+        } else {
+            switch (database.getSelectedEngine()) {
+                case mysql -> {
+                    bookDAO = new BookDAOMySQL(database.getConnection());
+                    memberDAO = new MemberDAOMySQL(database.getConnection());
+                    rentsDAO = new RentsDAOMySQL(database.getConnection());
+                }
+                case sqlite -> {
+                    bookDAO = new BookDAOSQLite(database.getConnection());
+                    memberDAO = new MemberDAOSQLite(database.getConnection());
+                    rentsDAO = new RentsDAOSQLite(database.getConnection());
+                }
+            }
+            books.load(bookDAO.getAll());
+            /*members.load(memberDAO.getAll());
+            rents.load(rentsDAO.getAll());*/
         }
-        bookDAO = new BookDAOMySQL(database.getConnection());
-        memberDAO = new MemberDAOMySQL(database.getConnection());
-        rentsDAO = new RentsDAOMySQL(database.getConnection());
-        books.load(bookDAO.getAll());
-        members.load(memberDAO.getAll());
-        rents.load(rentsDAO.getAll());
     }
 
     public static void setMySqlConfig(String host, int port, String user, String password, String databaseName) {
         database = new Database(host, port, user, password, databaseName);
         System.out.println(database);
+    }
+
+    // SQLite
+    public static void setSQLiteConfig(File databaseFile) {
+        database = new Database(databaseFile);
     }
 
     // Use case: Add book
