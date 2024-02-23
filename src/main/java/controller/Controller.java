@@ -119,7 +119,7 @@ public class Controller {
 
     // Use case: end rent
     public static boolean endRent(String uuid) {
-        if (rents.exists(uuid) && rents.get(uuid).getEndingDate().equals(Database.DEFAULT_TIMESTAMP)) {
+        if (rents.exists(uuid) && rents.get(uuid).getEndingDate() == null) {
             Timestamp now = new Timestamp(System.currentTimeMillis());
             if (rentsDAO.end(uuid, now)) {
                 rents.get(uuid).setEndingDate(now.toString());

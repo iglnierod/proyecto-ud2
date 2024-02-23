@@ -4,9 +4,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import utils.Util;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class Rent {
-    private String uuid;
+    private UUID uuid;
     private int bookID;
     private String memberID;
     private String beginningDate;
@@ -21,7 +22,7 @@ public class Rent {
         this.memberID = memberID;
         this.beginningDate = Util.formatDate(beginningDate);
         this.endingDate = Util.formatDate(endingDate);
-        this.uuid = encrypt(this.bookID + this.memberID);
+        this.uuid = UUID.randomUUID();
     }
 
     public Rent(int bookID, String memberID, String beginningDate, String endingDate) {
@@ -32,9 +33,6 @@ public class Rent {
     }
 
     // METHODS
-    private String encrypt(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
 
     @Override
     public String toString() {
@@ -48,11 +46,13 @@ public class Rent {
     }
 
     // GETTERS & SETTERS
-    public String getUuid() {
+
+
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 

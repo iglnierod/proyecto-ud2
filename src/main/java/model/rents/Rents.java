@@ -3,15 +3,16 @@ package model.rents;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Rents {
-    private HashMap<String, Rent> rents;
+    private HashMap<UUID, Rent> rents;
 
     public Rents() {
         this.rents = new HashMap<>();
     }
 
-    public Rents(HashMap<String, Rent> rents) {
+    public Rents(HashMap<UUID, Rent> rents) {
         this.rents = rents;
     }
 

@@ -93,6 +93,7 @@ public class DatabaseConfigView extends JFrame {
             }
 
             if (engine.equals("sqlite")) {
+                // TODO
             }
 
             this.dispose();

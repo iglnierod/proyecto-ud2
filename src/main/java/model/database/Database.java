@@ -11,8 +11,6 @@ import java.sql.Statement;
 public class Database implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public static final String DEFAULT_TIMESTAMP = "2001-01-01 00:00:00";
     private String host;
     private int port;
     private String user;
@@ -20,7 +18,6 @@ public class Database implements Serializable {
     private String databaseName;
     private static final File CONFIG_FILE = new File("config.bin");
     private boolean configLoaded;
-    private File SQLiteDatabase;
 
     public Database() {
 

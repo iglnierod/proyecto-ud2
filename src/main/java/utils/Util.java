@@ -16,7 +16,7 @@ public class Util {
 
     public static String formatDate(Timestamp timestamp) {
         if (timestamp == null) {
-            return Database.DEFAULT_TIMESTAMP;
+            return null;
         }
         LocalDateTime datetime = timestamp.toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

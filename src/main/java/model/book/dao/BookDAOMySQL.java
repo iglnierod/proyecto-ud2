@@ -37,7 +37,7 @@ public class BookDAOMySQL implements BookDAO {
     @Override
     public ArrayList<Book> getAvailable() {
         String query = "SELECT * FROM books WHERE id NOT IN (" +
-                "SELECT id_book FROM rents WHERE ending = '2001-01-01 00:00:00' ORDER BY beginning DESC);\n";
+                "SELECT id_book FROM rents WHERE ending IS NULL ORDER BY beginning DESC);\n";
         ArrayList<Book> booksList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
@@ -58,7 +58,7 @@ public class BookDAOMySQL implements BookDAO {
 
     @Override
     public ArrayList<Book> getNotAvailable() {
-        String query = String.format("SELECT * FROM books WHERE id IN (SELECT id_book FROM rents WHERE ending = '%s')", Database.DEFAULT_TIMESTAMP);
+        String query = "SELECT * FROM books WHERE id IN (SELECT id_book FROM rents WHERE ending IS NULL)";
         ArrayList<Book> booksList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
