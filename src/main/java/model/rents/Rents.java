@@ -36,12 +36,12 @@ public class Rents {
         }
     }
 
-    public Rent get(String uuid) {
+    public Rent get(UUID uuid) {
         return this.rents.get(uuid);
     }
 
-    public boolean exists(String id) {
-        return this.rents.get(id) != null;
+    public boolean exists(UUID uuid) {
+        return this.rents.get(uuid) != null;
     }
 
     public DefaultTableModel getRentedHistory(ArrayList<ArrayList<String>> rentedList) {

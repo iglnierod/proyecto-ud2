@@ -5,6 +5,7 @@ import controller.Controller;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.UUID;
 
 public class EndRentView extends JDialog {
     private JTextField idField;
@@ -56,7 +57,7 @@ public class EndRentView extends JDialog {
 
         JButton btnReturn = new JButton("Aceptar");
         btnReturn.addActionListener(e -> {
-            if (!Controller.endRent(idField.getText())) {
+            if (!Controller.endRent(UUID.fromString(idField.getText()))) {
                 JOptionPane.showMessageDialog(this, "No se ha podido cancelar el préstamo", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 this.dispose();

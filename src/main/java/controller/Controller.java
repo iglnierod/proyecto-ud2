@@ -19,6 +19,7 @@ import view.MainView;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 
 public class Controller {
@@ -118,7 +119,8 @@ public class Controller {
     }
 
     // Use case: end rent
-    public static boolean endRent(String uuid) {
+    public static boolean endRent(UUID uuid) {
+        System.out.println(rents.get(uuid));
         if (rents.exists(uuid) && rents.get(uuid).getEndingDate() == null) {
             Timestamp now = new Timestamp(System.currentTimeMillis());
             if (rentsDAO.end(uuid, now)) {

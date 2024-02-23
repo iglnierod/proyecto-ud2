@@ -4,6 +4,7 @@ import model.rents.Rent;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public interface RentsDAO {
     public ArrayList<Rent> getAll();
@@ -14,7 +15,7 @@ public interface RentsDAO {
 
     public boolean create(Rent rent);
 
-    public boolean end(String uuid, Timestamp now);
+    public boolean end(UUID uuid, Timestamp now);
 
     public void delete(Rent rent);
 }

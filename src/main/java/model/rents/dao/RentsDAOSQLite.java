@@ -5,6 +5,7 @@ import model.rents.Rent;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class RentsDAOSQLite implements RentsDAO {
     private Connection connection;
@@ -34,7 +35,7 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public boolean end(String uuid, Timestamp now) {
+    public boolean end(UUID uuid, Timestamp now) {
         return false;
     }
 

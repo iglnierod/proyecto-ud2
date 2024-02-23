@@ -91,12 +91,12 @@ public class RentsDAOMySQL implements RentsDAO {
     }
 
     @Override
-    public boolean end(String uuid, Timestamp now) {
+    public boolean end(UUID uuid, Timestamp now) {
 
         String query = "UPDATE rents SET ending = ? WHERE uuid = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setString(1, now.toString());
-            ps.setString(2, uuid);
+            ps.setString(2, uuid.toString());
 
             ps.executeUpdate();
             return true;
