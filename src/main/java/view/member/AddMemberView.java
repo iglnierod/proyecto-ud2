@@ -1,6 +1,7 @@
 package view.member;
 
 import controller.Controller;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,13 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class AddMemberView extends JDialog {
@@ -86,9 +81,17 @@ public class AddMemberView extends JDialog {
 
         JButton btnAddMember = new JButton("Aceptar");
         btnAddMember.addActionListener(e -> {
-            /**
-             * completar
-             */
+            String id = dniField.getText();
+            String name = nameField.getText();
+            String email = emailField.getText();
+            if (id.isEmpty() || name.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No puede haber campos vacíos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!Controller.addMember(id, name, email)) {
+                JOptionPane.showMessageDialog(this, "No se ha podido añadir el socio", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             this.dispose();
         });
         southPanel.add(btnAddMember, BorderLayout.EAST);

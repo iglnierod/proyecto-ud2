@@ -37,11 +37,11 @@ public class MemberListView extends JDialog {
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
         try {
-            columnNames = new String[] { "DNI", "Nombre", "Email" };
+            columnNames = new String[]{"DNI", "Nombre", "Email"};
             String[][] data = new String[0][0];
             table = new JTable(data, columnNames);
-
-            table.setBounds(30,40,200,300);
+            loadData(table);
+            table.setBounds(30, 40, 200, 300);
             table.setDefaultEditor(Object.class, null);
             table.setRowSelectionAllowed(false);
         } catch (Exception e) {
@@ -52,4 +52,9 @@ public class MemberListView extends JDialog {
         scrollPane.setViewportView(table);
         this.setVisible(true);
     }
+
+    private void loadData(JTable table) {
+        table.setModel(Controller.getMembersTableModel());
+    }
+
 }

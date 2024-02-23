@@ -48,7 +48,7 @@ public class DatabaseConfigView extends JFrame {
 
     private JLabel getHeader() {
         JLabel label = new JLabel("Configuración de la base de datos");
-        label.setBorder(BorderFactory.createEmptyBorder(20,0,0, 0));
+        label.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setFont(new Font("Tahoma", Font.BOLD, 16));
         return label;
@@ -56,30 +56,43 @@ public class DatabaseConfigView extends JFrame {
 
     private String getEngineSelectedFromTab() {
         int tabNum = tabsPane.getSelectedIndex();
-        if(tabNum == 0) return "mysql";
-        if(tabNum == 1) return "sqlite";
+        if (tabNum == 0) return "mysql";
+        if (tabNum == 1) return "sqlite";
         return "";
     }
 
     private int getTabSelectedFromEngine(Engine engine) {
-        if(engine == Engine.mysql) return 0;
-        if(engine == Engine.sqlite) return 1;
+        if (engine == Engine.mysql) return 0;
+        if (engine == Engine.sqlite) return 1;
         return 0;
     }
 
     private JPanel getFooter() {
         ANSI.printCyan("DatabaseConfigView.getFooter()");
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(0,0,20, 0));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         JButton btnSave = new JButton("Guardar");
 
         btnSave.addActionListener(e -> {
             String engine = getEngineSelectedFromTab();
 
-            if(engine.equals("mysql")) {
+            if (engine.equals("mysql")) {
+                String host = hostField.getText();
+                int port;
+                try {
+                    port = Integer.parseInt(portField.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "El puerto no es válido", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String user = usernameField.getText();
+                String password = passwordField.getText();
+                String databaseName = dbNameField.getText();
+
+                Controller.setMySqlConfig(host, port, user, password, databaseName);
             }
 
-            if(engine.equals("sqlite")) {
+            if (engine.equals("sqlite")) {
             }
 
             this.dispose();
@@ -92,7 +105,7 @@ public class DatabaseConfigView extends JFrame {
     private JTabbedPane getTabs() {
         ANSI.printCyan("DatabaseConfigView.getTabs()");
         tabsPane = new JTabbedPane();
-        tabsPane.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        tabsPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         tabsPane.addTab("MySQL", getMySqlTab());
         tabsPane.addTab("SQLite", getSQLiteTab());
         return tabsPane;

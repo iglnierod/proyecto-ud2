@@ -56,10 +56,11 @@ public class EndRentView extends JDialog {
 
         JButton btnReturn = new JButton("Aceptar");
         btnReturn.addActionListener(e -> {
-            /**
-             * completar
-             */
-            this.dispose();
+            if (!Controller.endRent(idField.getText())) {
+                JOptionPane.showMessageDialog(this, "No se ha podido cancelar el préstamo", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else {
+                this.dispose();
+            }
         });
         southPanel.add(btnReturn, BorderLayout.EAST);
 
