@@ -5,7 +5,7 @@ import model.book.Book;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public class BookDAOSQLite {
+public class BookDAOSQLite implements BookDAO{
     Connection connection;
 
     public BookDAOSQLite(Connection connection) {
@@ -15,12 +15,22 @@ public class BookDAOSQLite {
         return null;
     }
 
+    @Override
+    public ArrayList<Book> getAvailable() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Book> getNotAvailable() {
+        return null;
+    }
+
     public Book getById(int id) {
         return null;
     }
 
-    public void create(Book book) {
-
+    public boolean create(Book book) {
+        return false;
     }
 
     public void update(Book book) {
