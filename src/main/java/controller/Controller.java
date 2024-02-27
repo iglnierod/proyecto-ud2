@@ -1,5 +1,6 @@
 package controller;
 
+import main.Main;
 import model.book.Book;
 import model.book.Books;
 import model.book.dao.BookDAO;
@@ -17,6 +18,7 @@ import utils.ANSI;
 import view.DatabaseConfigView;
 import view.MainView;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -35,12 +37,14 @@ public class Controller {
     //
     private static int selectedBookID;
     private static String selectedMemberID;
+    private static MainView mainView;
 
     private Controller() {
         database = Database.loadConfigFile();
         books = new Books();
         members = new Members();
         rents = new Rents();
+        mainView = new MainView(this);
     }
 
     public static Controller getInstance() {
@@ -49,11 +53,18 @@ public class Controller {
 
     public void start() {
         ANSI.printBlue("Controller.start()");
-        MainView mainView = new MainView(this);
-        mainView.setVisible(true);
+
+
         if (!database.isConfigLoaded()) {
-            new DatabaseConfigView(mainView, this).setVisible(true);
+            new DatabaseConfigView(null, this).setVisible(true);
+        } else {
+            initiate();
         }
+
+    }
+
+    private static void initiate() {
+        mainView.setVisible(true);
         bookDAO = new BookDAOMySQL(database.getConnection());
         memberDAO = new MemberDAOMySQL(database.getConnection());
         rentsDAO = new RentsDAOMySQL(database.getConnection());
@@ -62,9 +73,20 @@ public class Controller {
         rents.load(rentsDAO.getAll());
     }
 
+
     public static void setMySqlConfig(String host, int port, String user, String password, String databaseName) {
         database = new Database(host, port, user, password, databaseName);
-        System.out.println(database);
+        if (database.isConnectionValid()) {
+            if (database.isCreated()) {
+                initiate();
+            } else {
+                if (database.createDatabase()) {
+                    initiate();
+                } else {
+                    JOptionPane.showMessageDialog(null, "La conexión es válida pero no existe la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
 
     // Use case: Add book

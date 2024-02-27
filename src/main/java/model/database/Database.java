@@ -1,16 +1,20 @@
 package model.database;
 
 import model.book.Book;
+import org.springframework.core.io.PathResource;
+import org.springframework.core.io.support.EncodedResource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Database implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    private static final String NAME = "library";
+    private static final String[] TABLES = new String[]{"books", "members", "rents"};
     private String host;
     private int port;
     private String user;
@@ -64,12 +68,81 @@ public class Database implements Serializable {
         try {
             Connection con = DriverManager.getConnection(url, getUser(), getPassword());
             Statement stmt = con.createStatement();
-            stmt.executeUpdate("USE " + getDatabaseName());
+            stmt.executeUpdate("USE " + (getDatabaseName().equals("") ? NAME : getDatabaseName()));
             return con;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean isConnectionValid() {
+        String url = String.format("jdbc:mysql://%s:%d", getHost(), getPort());
+        try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
+            System.err.println("isConnectionValid(): Conexión válida");
+            return true;
+        } catch (SQLException e) {
+            System.err.println("isConnectionValid(): Conexión no válida");
+            return false;
+        }
+    }
+
+    public boolean isCreated() {
+        String url = String.format("jdbc:mysql://%s:%d/%s", getHost(), getPort(), Database.NAME);
+        try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
+            Set<String> existingTables = getExistingTables(con);
+            if (existingTables.containsAll(Set.of(TABLES))) {
+                System.err.println("isCreated(): true");
+                return true;
+            } else {
+                System.err.println("isCreated(): false - Not all tables exist.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("isCreated(): false - " + e.getMessage());
+            return false;
+        }
+    }
+
+    private Set<String> getExistingTables(Connection con) throws SQLException {
+        Set<String> existingTables = new HashSet<>();
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery("SHOW TABLES")) {
+            while (rs.next()) {
+                existingTables.add(rs.getString(1));
+            }
+        }
+        return existingTables;
+    }
+
+    public boolean createDatabase() {
+        System.out.println("createDatabase()");
+        try {
+            Connection connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d", getHost(), getPort()), "root", "abc123.");
+            String path = "library.sql";
+            boolean continueOrError = false;
+            boolean ignoreFailedDrops = false;
+            String commentPrefix = "#";
+            String separator = ";";
+            String blockCommentStartDelimiter = "/*";
+            String blockCommentEndDelimiter = "*/";
+
+            ScriptUtils.executeSqlScript(
+                    connection,
+                    new EncodedResource(new PathResource(path)),
+                    continueOrError,
+                    ignoreFailedDrops,
+                    commentPrefix,
+                    separator,
+                    blockCommentStartDelimiter,
+                    blockCommentEndDelimiter
+            );
+            return true;
+        } catch (SQLException e) {
+            System.err.println("createDatabase(): fallo ejecutando script");
+            //e.printStackTrace();
+            return false;
+        }
     }
 
     // GETTERS & SETTERS
@@ -136,4 +209,6 @@ public class Database implements Serializable {
                 ", CONFIG_FILE=" + CONFIG_FILE +
                 '}';
     }
+
+
 }
