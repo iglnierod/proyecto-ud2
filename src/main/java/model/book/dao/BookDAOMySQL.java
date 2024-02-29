@@ -1,7 +1,8 @@
 package model.book.dao;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import model.book.Book;
-import model.database.Database;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -111,5 +112,21 @@ public class BookDAOMySQL implements BookDAO {
     @Override
     public void delete(Book book) {
 
+    }
+
+    public JsonObject export() {
+        JsonObject mainObject = new JsonObject();
+
+        JsonArray booksArray = new JsonArray();
+        for (Book b : getAll()) {
+            JsonObject bookObject = new JsonObject();
+            bookObject.addProperty("id", b.getId());
+            bookObject.addProperty("title", b.getTitle());
+            bookObject.addProperty("author", b.getAuthor());
+            booksArray.add(bookObject);
+        }
+
+        mainObject.add("books", booksArray);
+        return mainObject;
     }
 }

@@ -1,5 +1,7 @@
 package model.rents.dao;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import model.rents.Rent;
 
 import java.sql.*;
@@ -109,6 +111,25 @@ public class RentsDAOMySQL implements RentsDAO {
     @Override
     public void delete(Rent rent) {
 
+    }
+
+    @Override
+    public JsonObject export() {
+        JsonObject mainObject = new JsonObject();
+
+        JsonArray rentsArray = new JsonArray();
+        for (Rent r : getAll()) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("uuid", r.getUuid().toString());
+            jsonObject.addProperty("id_book", r.getBookID());
+            jsonObject.addProperty("id_member", r.getMemberID());
+            jsonObject.addProperty("beginning", r.getBeginningDate());
+            jsonObject.addProperty("ending", r.getEndingDate());
+            rentsArray.add(jsonObject);
+        }
+
+        mainObject.add("rents", rentsArray);
+        return mainObject;
     }
 
 

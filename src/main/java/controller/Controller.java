@@ -1,6 +1,5 @@
 package controller;
 
-import main.Main;
 import model.book.Book;
 import model.book.Books;
 import model.book.dao.BookDAO;
@@ -15,11 +14,13 @@ import model.rents.Rents;
 import model.rents.dao.RentsDAO;
 import model.rents.dao.RentsDAOMySQL;
 import utils.ANSI;
+import utils.JSON;
 import view.DatabaseConfigView;
 import view.MainView;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -49,6 +50,7 @@ public class Controller {
     public static Controller getInstance() {
         return MAIN_CONTROLLER;
     }
+
 
     public void start() {
         ANSI.printBlue("Controller.start()");
@@ -164,5 +166,10 @@ public class Controller {
     // Use case: view rented history
     public static DefaultTableModel getRentedHistoryTableModel() {
         return rents.getRentedHistory(rentsDAO.getHistory());
+    }
+
+    // Use case: export db to json
+    public static void export(File selectedFile) {
+        JSON.write(selectedFile, bookDAO.export(), memberDAO.export(), rentsDAO.export());
     }
 }

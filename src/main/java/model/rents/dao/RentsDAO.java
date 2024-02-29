@@ -1,5 +1,6 @@
 package model.rents.dao;
 
+import com.google.gson.JsonObject;
 import model.rents.Rent;
 
 import java.sql.Timestamp;
@@ -18,4 +19,6 @@ public interface RentsDAO {
     public boolean end(UUID uuid, Timestamp now);
 
     public void delete(Rent rent);
+
+    public JsonObject export();
 }

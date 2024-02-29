@@ -1,5 +1,6 @@
 package model.rents.dao;
 
+import com.google.gson.JsonObject;
 import model.rents.Rent;
 
 import java.sql.Connection;
@@ -42,5 +43,10 @@ public class RentsDAOSQLite implements RentsDAO {
     @Override
     public void delete(Rent rent) {
 
+    }
+
+    @Override
+    public JsonObject export() {
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package model.book.dao;
 
+import com.google.gson.JsonObject;
 import model.book.Book;
 
 import java.sql.Connection;
@@ -39,5 +40,10 @@ public class BookDAOSQLite implements BookDAO{
 
     public void delete(Book book) {
 
+    }
+
+    @Override
+    public JsonObject export() {
+        return null;
     }
 }

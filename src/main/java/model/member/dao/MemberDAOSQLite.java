@@ -1,6 +1,6 @@
 package model.member.dao;
 
-import model.book.Book;
+import com.google.gson.JsonObject;
 import model.member.Member;
 
 import java.util.ArrayList;
@@ -29,5 +29,10 @@ public class MemberDAOSQLite implements MemberDAO {
     @Override
     public void delete(Member member) {
 
+    }
+
+    @Override
+    public JsonObject export() {
+        return null;
     }
 }

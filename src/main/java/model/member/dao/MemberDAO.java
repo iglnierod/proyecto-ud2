@@ -1,5 +1,6 @@
 package model.member.dao;
 
+import com.google.gson.JsonObject;
 import model.member.Member;
 
 import java.util.ArrayList;
@@ -14,4 +15,7 @@ public interface MemberDAO {
     public void update(Member member);
 
     public void delete(Member member);
+
+    public JsonObject export();
+
 }

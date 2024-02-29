@@ -1,5 +1,7 @@
 package model.book.dao;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import model.book.Book;
 
 import java.util.ArrayList;
@@ -18,4 +20,6 @@ public interface BookDAO {
     public void update(Book book);
 
     public void delete(Book book);
+
+    public JsonObject export();
 }

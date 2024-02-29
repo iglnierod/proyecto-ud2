@@ -1,6 +1,7 @@
 package model.member.dao;
 
-import model.book.Book;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import model.member.Member;
 
 import java.sql.*;
@@ -63,5 +64,22 @@ public class MemberDAOMySQL implements MemberDAO {
     @Override
     public void delete(Member member) {
 
+    }
+
+    @Override
+    public JsonObject export() {
+        JsonObject mainObject = new JsonObject();
+
+        JsonArray membersArray = new JsonArray();
+        for (Member m : getAll()) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("id", m.getId());
+            jsonObject.addProperty("name", m.getName());
+            jsonObject.addProperty("email", m.getEmail());
+            membersArray.add(jsonObject);
+        }
+
+        mainObject.add("members", membersArray);
+        return mainObject;
     }
 }
