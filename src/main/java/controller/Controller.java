@@ -31,7 +31,6 @@ public class Controller {
     private static BookDAO bookDAO;
     private static Members members;
     private static MemberDAO memberDAO;
-
     private static Rents rents;
     private static RentsDAO rentsDAO;
     //
@@ -60,7 +59,7 @@ public class Controller {
         } else {
             initiate();
         }
-
+        System.out.println(database);
     }
 
     private static void initiate() {
@@ -74,19 +73,23 @@ public class Controller {
     }
 
 
-    public static void setMySqlConfig(String host, int port, String user, String password, String databaseName) {
+    public static boolean setMySqlConfig(String host, int port, String user, String password, String databaseName) {
         database = new Database(host, port, user, password, databaseName);
         if (database.isConnectionValid()) {
             if (database.isCreated()) {
                 initiate();
+                return true;
             } else {
                 if (database.createDatabase()) {
                     initiate();
+                    return true;
                 } else {
                     JOptionPane.showMessageDialog(null, "La conexión es válida pero no existe la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return false;
                 }
             }
         }
+        return false;
     }
 
     // Use case: Add book

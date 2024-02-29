@@ -4,6 +4,7 @@ import model.book.Book;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
+import utils.ANSI;
 
 import java.io.*;
 import java.sql.*;
@@ -33,7 +34,8 @@ public class Database implements Serializable {
         this.user = user;
         this.password = password;
         this.databaseName = databaseName;
-        createConfigFile();
+        if (isConnectionValid())
+            createConfigFile();
     }
 
     // METHODS
@@ -79,7 +81,7 @@ public class Database implements Serializable {
     public boolean isConnectionValid() {
         String url = String.format("jdbc:mysql://%s:%d", getHost(), getPort());
         try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
-            System.err.println("isConnectionValid(): Conexión válida");
+            ANSI.printBlue("isConnectionValid(): Conexión válida");
             return true;
         } catch (SQLException e) {
             System.err.println("isConnectionValid(): Conexión no válida");
@@ -137,6 +139,7 @@ public class Database implements Serializable {
                     blockCommentStartDelimiter,
                     blockCommentEndDelimiter
             );
+            this.databaseName = Database.NAME;
             return true;
         } catch (SQLException e) {
             System.err.println("createDatabase(): fallo ejecutando script");

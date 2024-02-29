@@ -89,14 +89,17 @@ public class DatabaseConfigView extends JFrame {
                 String password = passwordField.getText();
                 String databaseName = dbNameField.getText();
 
-                Controller.setMySqlConfig(host, port, user, password, databaseName);
+                if (!Controller.setMySqlConfig(host, port, user, password, databaseName)) {
+                    JOptionPane.showMessageDialog(this, "La conexión no se ha podido establecer", "ERROR", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    this.dispose();
+                }
+
             }
 
             if (engine.equals("sqlite")) {
                 // TODO
             }
-
-            this.dispose();
         });
 
         panel.add(btnSave);
