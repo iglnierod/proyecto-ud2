@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.gson.JsonObject;
 import model.book.Book;
 import model.book.Books;
 import model.book.dao.BookDAO;
@@ -9,10 +10,10 @@ import model.member.Member;
 import model.member.Members;
 import model.member.dao.MemberDAO;
 import model.member.dao.MemberDAOMySQL;
-import model.rents.Rent;
-import model.rents.Rents;
-import model.rents.dao.RentsDAO;
-import model.rents.dao.RentsDAOMySQL;
+import model.rent.Rent;
+import model.rent.Rents;
+import model.rent.dao.RentsDAO;
+import model.rent.dao.RentsDAOMySQL;
 import utils.ANSI;
 import utils.JSON;
 import view.DatabaseConfigView;
@@ -170,6 +171,10 @@ public class Controller {
 
     // Use case: export db to json
     public static void export(File selectedFile) {
-        JSON.write(selectedFile, bookDAO.export(), memberDAO.export(), rentsDAO.export());
+        JsonObject main = new JsonObject();
+        main.add("books",bookDAO.export());
+        main.add("members",memberDAO.export());
+        main.add("rents",rentsDAO.export());
+        JSON.write(selectedFile, main);
     }
 }

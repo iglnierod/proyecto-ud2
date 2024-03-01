@@ -1,7 +1,7 @@
-package model.rents.dao;
+package model.rent.dao;
 
-import com.google.gson.JsonObject;
-import model.rents.Rent;
+import com.google.gson.JsonArray;
+import model.rent.Rent;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -46,7 +46,7 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public JsonObject export() {
+    public JsonArray export() {
         return null;
     }
 }

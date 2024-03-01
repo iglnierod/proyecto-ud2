@@ -1,4 +1,4 @@
-package model.rents;
+package model.rent;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;

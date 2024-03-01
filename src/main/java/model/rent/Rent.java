@@ -1,6 +1,5 @@
-package model.rents;
+package model.rent;
 
-import org.mindrot.jbcrypt.BCrypt;
 import utils.Util;
 
 import java.sql.Timestamp;

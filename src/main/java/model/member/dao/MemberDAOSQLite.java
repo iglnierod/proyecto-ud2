@@ -1,5 +1,6 @@
 package model.member.dao;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.member.Member;
 
@@ -32,7 +33,7 @@ public class MemberDAOSQLite implements MemberDAO {
     }
 
     @Override
-    public JsonObject export() {
+    public JsonArray export() {
         return null;
     }
 }

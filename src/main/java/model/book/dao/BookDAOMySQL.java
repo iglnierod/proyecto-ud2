@@ -114,9 +114,7 @@ public class BookDAOMySQL implements BookDAO {
 
     }
 
-    public JsonObject export() {
-        JsonObject mainObject = new JsonObject();
-
+    public JsonArray export() {
         JsonArray booksArray = new JsonArray();
         for (Book b : getAll()) {
             JsonObject bookObject = new JsonObject();
@@ -125,8 +123,6 @@ public class BookDAOMySQL implements BookDAO {
             bookObject.addProperty("author", b.getAuthor());
             booksArray.add(bookObject);
         }
-
-        mainObject.add("books", booksArray);
-        return mainObject;
+        return booksArray;
     }
 }

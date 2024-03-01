@@ -1,5 +1,6 @@
 package model.member.dao;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.member.Member;
 
@@ -16,6 +17,6 @@ public interface MemberDAO {
 
     public void delete(Member member);
 
-    public JsonObject export();
+    public JsonArray export();
 
 }

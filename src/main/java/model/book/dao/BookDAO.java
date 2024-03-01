@@ -21,5 +21,5 @@ public interface BookDAO {
 
     public void delete(Book book);
 
-    public JsonObject export();
+    public JsonArray export();
 }

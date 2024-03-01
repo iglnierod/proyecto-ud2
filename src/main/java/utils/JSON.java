@@ -10,13 +10,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class JSON {
-    public static void write(File file, JsonObject... jsonObjects) {
+    public static void write(File file, JsonObject main) {
         Gson gson = new Gson();
-        JsonArray main = new JsonArray();
-        for (JsonObject object : jsonObjects) {
-            main.add(object);
-        }
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(gson.toJson(main));
         } catch (IOException e) {

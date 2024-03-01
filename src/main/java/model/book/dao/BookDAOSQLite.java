@@ -1,17 +1,19 @@
 package model.book.dao;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.book.Book;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public class BookDAOSQLite implements BookDAO{
+public class BookDAOSQLite implements BookDAO {
     Connection connection;
 
     public BookDAOSQLite(Connection connection) {
         this.connection = connection;
     }
+
     public ArrayList<Book> getAll() {
         return null;
     }
@@ -43,7 +45,7 @@ public class BookDAOSQLite implements BookDAO{
     }
 
     @Override
-    public JsonObject export() {
+    public JsonArray export() {
         return null;
     }
 }

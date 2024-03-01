@@ -67,9 +67,7 @@ public class MemberDAOMySQL implements MemberDAO {
     }
 
     @Override
-    public JsonObject export() {
-        JsonObject mainObject = new JsonObject();
-
+    public JsonArray export() {
         JsonArray membersArray = new JsonArray();
         for (Member m : getAll()) {
             JsonObject jsonObject = new JsonObject();
@@ -78,8 +76,6 @@ public class MemberDAOMySQL implements MemberDAO {
             jsonObject.addProperty("email", m.getEmail());
             membersArray.add(jsonObject);
         }
-
-        mainObject.add("members", membersArray);
-        return mainObject;
+        return membersArray;
     }
 }
