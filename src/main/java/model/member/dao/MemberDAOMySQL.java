@@ -78,4 +78,9 @@ public class MemberDAOMySQL implements MemberDAO {
         }
         return membersArray;
     }
+
+    @Override
+    public void importData(JsonObject object) {
+
+    }
 }

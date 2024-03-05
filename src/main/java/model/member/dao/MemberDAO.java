@@ -19,4 +19,6 @@ public interface MemberDAO {
 
     public JsonArray export();
 
+    public void importData(JsonObject object);
+
 }

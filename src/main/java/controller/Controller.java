@@ -23,6 +23,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -172,9 +174,14 @@ public class Controller {
     // Use case: export db to json
     public static void export(File selectedFile) {
         JsonObject main = new JsonObject();
-        main.add("books",bookDAO.export());
-        main.add("members",memberDAO.export());
-        main.add("rents",rentsDAO.export());
+        main.add("books", bookDAO.export());
+        main.add("members", memberDAO.export());
+        main.add("rents", rentsDAO.export());
         JSON.write(selectedFile, main);
+    }
+
+    // Use case: import db from json
+    public static void importData(File selectedFile) {
+        bookDAO.importData(JSON.getBooks(selectedFile), true);
     }
 }

@@ -36,6 +36,11 @@ public class BookDAOSQLite implements BookDAO {
         return false;
     }
 
+    @Override
+    public void createWithID(Book book) {
+
+    }
+
     public void update(Book book) {
 
     }
@@ -48,4 +53,15 @@ public class BookDAOSQLite implements BookDAO {
     public JsonArray export() {
         return null;
     }
+
+    @Override
+    public void importData(ArrayList<Book> books, boolean emptyTable) {
+
+    }
+
+    @Override
+    public void emptyTable() {
+
+    }
+
 }

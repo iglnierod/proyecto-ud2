@@ -105,6 +105,20 @@ public class BookDAOMySQL implements BookDAO {
     }
 
     @Override
+    public void createWithID(Book book) {
+        String query = "INSERT INTO books(id, title, author) VALUES(?,?,?)";
+        try (PreparedStatement ps = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, book.getId());
+            ps.setString(2, book.getTitle());
+            ps.setString(3, book.getAuthor());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void update(Book book) {
 
     }
@@ -124,5 +138,27 @@ public class BookDAOMySQL implements BookDAO {
             booksArray.add(bookObject);
         }
         return booksArray;
+    }
+
+    @Override
+    public void importData(ArrayList<Book> books, boolean emptyTable) {
+        if (emptyTable) {
+            emptyTable();
+        }
+
+        for(Book b : books) {
+            createWithID(b);
+        }
+
+    }
+
+    @Override
+    public void emptyTable() {
+        String query = "DELETE FROM books";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

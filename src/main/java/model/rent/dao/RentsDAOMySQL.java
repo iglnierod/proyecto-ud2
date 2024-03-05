@@ -128,5 +128,10 @@ public class RentsDAOMySQL implements RentsDAO {
         return rentsArray;
     }
 
+    @Override
+    public void importData(JsonObject object) {
+
+    }
+
 
 }

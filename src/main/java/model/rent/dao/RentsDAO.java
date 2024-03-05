@@ -1,6 +1,7 @@
 package model.rent.dao;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import model.rent.Rent;
 
 import java.sql.Timestamp;
@@ -21,4 +22,6 @@ public interface RentsDAO {
     public void delete(Rent rent);
 
     public JsonArray export();
+
+    public void importData(JsonObject object);
 }

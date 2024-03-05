@@ -36,4 +36,9 @@ public class MemberDAOSQLite implements MemberDAO {
     public JsonArray export() {
         return null;
     }
+
+    @Override
+    public void importData(JsonObject object) {
+
+    }
 }

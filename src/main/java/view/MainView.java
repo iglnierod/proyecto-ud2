@@ -203,6 +203,7 @@ public class MainView extends JFrame {
                 java.io.File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
                 System.out.println("Archivo seleccionado: " + filePath);
+                Controller.importData(selectedFile);
             }
         });
 
