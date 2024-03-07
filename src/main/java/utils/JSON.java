@@ -104,7 +104,9 @@ public class JSON {
                 rent.setBookID(rentObject.get("id_book").getAsInt());
                 rent.setMemberID(rentObject.get("id_member").getAsString());
                 rent.setBeginningDate(rentObject.get("beginning").getAsString());
-                rent.setEndingDate(rentObject.get("ending").getAsString());
+                String ending = rentObject.get("ending") == null ? null : rentObject.get("ending").getAsString();
+                System.out.println("ending: " + ending);
+                rent.setEndingDate(ending);
                 rents.add(rent);
             }
 

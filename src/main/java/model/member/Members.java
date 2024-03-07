@@ -1,7 +1,5 @@
 package model.member;
 
-import model.book.Book;
-
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +26,7 @@ public class Members {
         }
     }
 
-    public DefaultTableModel getAvailableBooksTableModel() {
+    public DefaultTableModel getMembersTableModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("DNI");
         model.addColumn("Nombre");

@@ -23,8 +23,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -128,7 +126,7 @@ public class Controller {
 
     // Use case: view members
     public static DefaultTableModel getMembersTableModel() {
-        return members.getAvailableBooksTableModel();
+        return members.getMembersTableModel();
     }
 
     // Use case: rent book
@@ -182,8 +180,15 @@ public class Controller {
 
     // Use case: import db from json
     public static void importData(File selectedFile) {
-        bookDAO.importData(JSON.getBooks(selectedFile), true);
-        memberDAO.importData(JSON.getMembers(selectedFile), true);
-        rentsDAO.importData(JSON.getRents(selectedFile), true);
+        emptyAllTables();
+        bookDAO.importData(JSON.getBooks(selectedFile), false);
+        memberDAO.importData(JSON.getMembers(selectedFile), false);
+        rentsDAO.importData(JSON.getRents(selectedFile), false);
+    }
+
+    private static void emptyAllTables() {
+        rentsDAO.emptyTable();
+        bookDAO.emptyTable();
+        memberDAO.emptyTable();
     }
 }
