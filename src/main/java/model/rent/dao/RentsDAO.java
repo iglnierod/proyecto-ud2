@@ -23,5 +23,7 @@ public interface RentsDAO {
 
     public JsonArray export();
 
-    public void importData(JsonObject object);
+    public void importData(ArrayList<Rent> rents, boolean emptyTable);
+
+    void emptyTable();
 }

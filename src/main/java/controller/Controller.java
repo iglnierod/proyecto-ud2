@@ -183,5 +183,7 @@ public class Controller {
     // Use case: import db from json
     public static void importData(File selectedFile) {
         bookDAO.importData(JSON.getBooks(selectedFile), true);
+        memberDAO.importData(JSON.getMembers(selectedFile), true);
+        rentsDAO.importData(JSON.getRents(selectedFile), true);
     }
 }

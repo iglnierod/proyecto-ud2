@@ -2,6 +2,7 @@ package model.member.dao;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import model.book.Book;
 import model.member.Member;
 
 import java.sql.*;
@@ -80,7 +81,23 @@ public class MemberDAOMySQL implements MemberDAO {
     }
 
     @Override
-    public void importData(JsonObject object) {
+    public void importData(ArrayList<Member> members, boolean emptyTable) {
+        if (emptyTable) {
+            emptyTable();
+        }
 
+        for (Member m : members) {
+            create(m);
+        }
+    }
+
+    @Override
+    public void emptyTable() {
+        String query = "DELETE FROM members";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

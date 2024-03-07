@@ -52,7 +52,12 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public void importData(JsonObject object) {
+    public void importData(ArrayList<Rent> rents, boolean emptyTable) {
+
+    }
+
+    @Override
+    public void emptyTable() {
 
     }
 }

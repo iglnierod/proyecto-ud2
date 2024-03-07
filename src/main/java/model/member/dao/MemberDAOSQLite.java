@@ -38,7 +38,13 @@ public class MemberDAOSQLite implements MemberDAO {
     }
 
     @Override
-    public void importData(JsonObject object) {
+    public void importData(ArrayList<Member> members, boolean emptyTable) {
 
     }
+
+    @Override
+    public void emptyTable() {
+
+    }
+
 }
