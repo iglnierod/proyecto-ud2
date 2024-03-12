@@ -39,7 +39,7 @@ public class BookDAOMySQL implements BookDAO {
     @Override
     public ArrayList<Book> getAvailable() {
         String query = "SELECT * FROM books WHERE id NOT IN (" +
-                "SELECT id_book FROM rents WHERE ending IS NULL ORDER BY beginning DESC);\n";
+                "SELECT id_book FROM rents WHERE ending IS NULL ORDER BY beginning DESC);";
         ArrayList<Book> booksList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);

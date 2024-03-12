@@ -31,6 +31,8 @@ public class Members {
         model.addColumn("DNI");
         model.addColumn("Nombre");
         model.addColumn("Email");
+        if(all.isEmpty())
+            return model;
 
         for (Member m : all) {
             String[] memberArray = {m.getId(), m.getName(), m.getEmail()};

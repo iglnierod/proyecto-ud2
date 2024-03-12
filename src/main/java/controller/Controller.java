@@ -56,7 +56,6 @@ public class Controller {
     public void start() {
         ANSI.printBlue("Controller.start()");
 
-
         if (!database.isConfigLoaded()) {
             new DatabaseConfigView(null, this).setVisible(true);
         } else {
@@ -158,6 +157,7 @@ public class Controller {
         }
         return false;
     }
+
 
     // Use case: view not available books
     public static DefaultTableModel getNotAvailableBooksTableModel() {

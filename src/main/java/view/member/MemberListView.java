@@ -4,6 +4,7 @@ import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class MemberListView extends JDialog {
@@ -40,7 +41,6 @@ public class MemberListView extends JDialog {
             columnNames = new String[]{"DNI", "Nombre", "Email"};
             String[][] data = new String[0][0];
             table = new JTable(data, columnNames);
-            loadData(table);
             table.setBounds(30, 40, 200, 300);
             table.setDefaultEditor(Object.class, null);
             table.setRowSelectionAllowed(false);
@@ -48,13 +48,20 @@ public class MemberListView extends JDialog {
             e.printStackTrace();
             return;
         }
-
         scrollPane.setViewportView(table);
-        this.setVisible(true);
+        if (loadData(table)) {
+            this.setVisible(true);
+        }
     }
 
-    private void loadData(JTable table) {
-        table.setModel(Controller.getMembersTableModel());
+    private boolean loadData(JTable table) {
+        DefaultTableModel model = Controller.getMembersTableModel();
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No hay socios", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        table.setModel(model);
+        return true;
     }
 
 }
