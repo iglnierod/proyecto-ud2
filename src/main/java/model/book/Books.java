@@ -64,6 +64,9 @@ public class Books {
         model.addColumn("ID");
         model.addColumn("Título");
         model.addColumn("Autor/a");
+        if(bookList.isEmpty()){
+            return model;
+        }
 
         for (Book b : bookList) {
             String[] bookArray = {String.valueOf(b.getId()), b.getTitle(), b.getAuthor()};
@@ -79,6 +82,10 @@ public class Books {
         model.addColumn("Título");
         model.addColumn("Autor/a");
 
+        if(bookList.isEmpty()){
+            return model;
+        }
+
         for (Book b : bookList) {
             String[] bookArray = {String.valueOf(b.getId()), b.getTitle(), b.getAuthor()};
             model.addRow(bookArray);
@@ -92,4 +99,7 @@ public class Books {
     }
 
 
+    public boolean isEmpty() {
+        return books.isEmpty();
+    }
 }

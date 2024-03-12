@@ -4,6 +4,7 @@ import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class RentedBooksView extends JDialog {
@@ -38,11 +39,10 @@ public class RentedBooksView extends JDialog {
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
         try {
-            columnNames = new String[] { "ID", "Título", "Autor/a" };
+            columnNames = new String[]{"ID", "Título", "Autor/a"};
             String[][] data = new String[0][0];
             table = new JTable(data, columnNames);
-            table.setModel(Controller.getNotAvailableBooksTableModel());
-            table.setBounds(30,40,200,300);
+            table.setBounds(30, 40, 200, 300);
             table.setDefaultEditor(Object.class, null);
             table.setRowSelectionAllowed(false);
 
@@ -52,6 +52,18 @@ public class RentedBooksView extends JDialog {
         }
 
         scrollPane.setViewportView(table);
-        this.setVisible(true);
+        if (loadData(table)) {
+            this.setVisible(true);
+        }
+    }
+
+    private boolean loadData(JTable table) {
+        DefaultTableModel model = Controller.getNotAvailableBooksTableModel();
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No hay libros prestados", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        table.setModel(model);
+        return true;
     }
 }

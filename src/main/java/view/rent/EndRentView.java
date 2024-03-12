@@ -14,6 +14,13 @@ public class EndRentView extends JDialog {
 
     public EndRentView(JFrame parent, Controller controller) {
         super(parent, "Biblioteca", true);
+
+        if (Controller.isRentsEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay préstamos activos",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(400, 258));

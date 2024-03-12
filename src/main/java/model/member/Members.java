@@ -21,7 +21,7 @@ public class Members {
     }
 
     public void load(ArrayList<Member> membersList) {
-        for(Member m : membersList) {
+        for (Member m : membersList) {
             members.put(m.getId(), m);
         }
     }
@@ -31,7 +31,7 @@ public class Members {
         model.addColumn("DNI");
         model.addColumn("Nombre");
         model.addColumn("Email");
-        if(all.isEmpty())
+        if (all.isEmpty())
             return model;
 
         for (Member m : all) {
@@ -40,5 +40,9 @@ public class Members {
         }
 
         return model;
+    }
+
+    public boolean isEmpty() {
+        return members.isEmpty();
     }
 }

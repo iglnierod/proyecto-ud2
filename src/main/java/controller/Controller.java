@@ -53,6 +53,8 @@ public class Controller {
     }
 
 
+
+
     public void start() {
         ANSI.printBlue("Controller.start()");
 
@@ -145,7 +147,18 @@ public class Controller {
         }
     }
 
+    public static boolean isBooksEmpty() {
+        return books.isEmpty();
+    }
+
+    public static boolean isMembersEmpty() {
+        return members.isEmpty();
+    }
     // Use case: end rent
+    public static boolean isRentsEmpty() {
+        return rents.isEmpty();
+    }
+
     public static boolean endRent(UUID uuid) {
         System.out.println(rents.get(uuid));
         if (rents.exists(uuid) && rents.get(uuid).getEndingDate() == null) {

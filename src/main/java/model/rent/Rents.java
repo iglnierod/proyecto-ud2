@@ -63,4 +63,9 @@ public class Rents {
             model.addColumn(s);
         }
     }
+
+    public boolean isEmpty() {
+        System.out.println(rents.size());
+        return rents.isEmpty();
+    }
 }

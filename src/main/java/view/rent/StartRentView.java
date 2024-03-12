@@ -39,6 +39,12 @@ public class StartRentView extends JDialog {
         this.parent = frame;
         this.step = 1;
 
+        if (Controller.isBooksEmpty() || Controller.isMembersEmpty()) {
+            JOptionPane.showMessageDialog(parent, "No hay miembros o libros disponibles para realizar un préstamo",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         header();
         tableBooks();
         buttons();
@@ -73,8 +79,8 @@ public class StartRentView extends JDialog {
             if (step == 1) {
                 DefaultTableModel model = (DefaultTableModel) booksTable.getModel();
                 int selectedRow = booksTable.getSelectedRow();
-                if(selectedRow == -1) {
-                    JOptionPane.showMessageDialog(this,"Seleccione un libro","ERROR",JOptionPane.ERROR_MESSAGE);
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this, "Seleccione un libro", "ERROR", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 String selectedBook = model.getValueAt(selectedRow, 0).toString();
@@ -89,8 +95,8 @@ public class StartRentView extends JDialog {
             if (step == 2) {
                 DefaultTableModel model = (DefaultTableModel) membersTable.getModel();
                 int selectedRow = membersTable.getSelectedRow();
-                if(selectedRow == -1) {
-                    JOptionPane.showMessageDialog(this,"Seleccione un miembro","ERROR",JOptionPane.ERROR_MESSAGE);
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(this, "Seleccione un miembro", "ERROR", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 String selectedMember = model.getValueAt(selectedRow, 0).toString();
@@ -122,7 +128,13 @@ public class StartRentView extends JDialog {
             booksColumnNames = new String[]{"ID", "Título", "Autor/a"};
             String[][] data = new String[0][0]; // Completar con libros
             booksTable = new JTable(data, booksColumnNames);
-            booksTable.setModel(Controller.getAvailableBooksTableModel());
+            DefaultTableModel model = Controller.getAvailableBooksTableModel();
+            if (model.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "No hay libros disponibles para realizar un préstamo",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            booksTable.setModel(model);
             booksTable.setDefaultEditor(Object.class, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,7 +161,13 @@ public class StartRentView extends JDialog {
             membersColumnNames = new String[]{"DNI", "Nombre", "Email"};
             String[][] data = new String[0][0]; // Completar con socios
             membersTable = new JTable(data, membersColumnNames);
-            membersTable.setModel(Controller.getMembersTableModel());
+            DefaultTableModel model = Controller.getMembersTableModel();
+            if (model.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "No hay socios para realizar un préstamo",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            membersTable.setModel(model);
             membersTable.setDefaultEditor(Object.class, null);
         } catch (Exception e) {
             e.printStackTrace();
