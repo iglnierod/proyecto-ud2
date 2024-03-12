@@ -3,6 +3,7 @@ package model.book.dao;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.book.Book;
+import model.book.Books;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -141,15 +142,13 @@ public class BookDAOMySQL implements BookDAO {
     }
 
     @Override
-    public void importData(ArrayList<Book> books, boolean emptyTable) {
-        if (emptyTable) {
-            emptyTable();
-        }
-
-        for(Book b : books) {
+    public Books importData(ArrayList<Book> booksList) {
+        Books books = new Books();
+        for (Book b : booksList) {
             createWithID(b);
+            books.add(b);
         }
-
+        return books;
     }
 
     @Override

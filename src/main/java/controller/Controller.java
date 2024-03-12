@@ -126,7 +126,7 @@ public class Controller {
 
     // Use case: view members
     public static DefaultTableModel getMembersTableModel() {
-        return members.getMembersTableModel();
+        return members.getMembersTableModel(memberDAO.getAll());
     }
 
     // Use case: rent book
@@ -181,9 +181,9 @@ public class Controller {
     // Use case: import db from json
     public static void importData(File selectedFile) {
         emptyAllTables();
-        bookDAO.importData(JSON.getBooks(selectedFile), false);
-        memberDAO.importData(JSON.getMembers(selectedFile), false);
-        rentsDAO.importData(JSON.getRents(selectedFile), false);
+        books = bookDAO.importData(JSON.getBooks(selectedFile));
+        members = memberDAO.importData(JSON.getMembers(selectedFile));
+        rents = rentsDAO.importData(JSON.getRents(selectedFile));
     }
 
     private static void emptyAllTables() {

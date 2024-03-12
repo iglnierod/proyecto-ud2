@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.member.Member;
 import model.rent.Rent;
+import model.rent.Rents;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -130,14 +131,13 @@ public class RentsDAOMySQL implements RentsDAO {
     }
 
     @Override
-    public void importData(ArrayList<Rent> rents, boolean emptyTable) {
-        if (emptyTable) {
-            emptyTable();
-        }
-
-        for (Rent r : rents) {
+    public Rents importData(ArrayList<Rent> rentsList) {
+        Rents rents = new Rents();
+        for (Rent r : rentsList) {
             create(r);
+            rents.add(r);
         }
+        return rents;
     }
 
     @Override

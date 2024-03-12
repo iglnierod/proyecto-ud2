@@ -3,6 +3,7 @@ package model.book.dao;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.book.Book;
+import model.book.Books;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class BookDAOSQLite implements BookDAO {
     }
 
     @Override
-    public void importData(ArrayList<Book> books, boolean emptyTable) {
-
+    public Books importData(ArrayList<Book> books) {
+        return null;
     }
 
     @Override

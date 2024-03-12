@@ -2,6 +2,7 @@ package model.book.dao;
 
 import com.google.gson.JsonArray;
 import model.book.Book;
+import model.book.Books;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public interface BookDAO {
 
     public JsonArray export();
 
-    void importData(ArrayList<Book> books, boolean emptyTable);
+    Books importData(ArrayList<Book> books);
 
     void emptyTable();
 }

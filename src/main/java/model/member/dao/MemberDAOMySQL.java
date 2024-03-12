@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.book.Book;
 import model.member.Member;
+import model.member.Members;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -81,14 +82,13 @@ public class MemberDAOMySQL implements MemberDAO {
     }
 
     @Override
-    public void importData(ArrayList<Member> members, boolean emptyTable) {
-        if (emptyTable) {
-            emptyTable();
-        }
-
-        for (Member m : members) {
+    public Members importData(ArrayList<Member> membersList) {
+        Members members = new Members();
+        for (Member m : membersList) {
             create(m);
+            members.add(m);
         }
+        return members;
     }
 
     @Override

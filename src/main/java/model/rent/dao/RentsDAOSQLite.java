@@ -3,6 +3,7 @@ package model.rent.dao;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.rent.Rent;
+import model.rent.Rents;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
@@ -52,8 +53,8 @@ public class RentsDAOSQLite implements RentsDAO {
     }
 
     @Override
-    public void importData(ArrayList<Rent> rents, boolean emptyTable) {
-
+    public Rents importData(ArrayList<Rent> rents) {
+        return null;
     }
 
     @Override

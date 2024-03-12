@@ -26,13 +26,13 @@ public class Members {
         }
     }
 
-    public DefaultTableModel getMembersTableModel() {
+    public DefaultTableModel getMembersTableModel(ArrayList<Member> all) {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("DNI");
         model.addColumn("Nombre");
         model.addColumn("Email");
 
-        for (Member m : members.values()) {
+        for (Member m : all) {
             String[] memberArray = {m.getId(), m.getName(), m.getEmail()};
             model.addRow(memberArray);
         }

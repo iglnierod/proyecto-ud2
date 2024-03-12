@@ -3,6 +3,7 @@ package model.member.dao;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.member.Member;
+import model.member.Members;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,8 @@ public class MemberDAOSQLite implements MemberDAO {
     }
 
     @Override
-    public void importData(ArrayList<Member> members, boolean emptyTable) {
-
+    public Members importData(ArrayList<Member> members) {
+        return null;
     }
 
     @Override

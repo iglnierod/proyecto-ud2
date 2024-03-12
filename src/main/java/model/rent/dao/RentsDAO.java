@@ -3,6 +3,7 @@ package model.rent.dao;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import model.rent.Rent;
+import model.rent.Rents;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public interface RentsDAO {
 
     public JsonArray export();
 
-    public void importData(ArrayList<Rent> rents, boolean emptyTable);
+    public Rents importData(ArrayList<Rent> rents);
 
     void emptyTable();
 }
