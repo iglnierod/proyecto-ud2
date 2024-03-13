@@ -148,7 +148,7 @@ public class Controller {
     }
 
     public static boolean isBooksEmpty() {
-        return books.isEmpty();
+        return bookDAO.getAvailable().isEmpty();
     }
 
     public static boolean isMembersEmpty() {

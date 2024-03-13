@@ -97,9 +97,4 @@ public class Books {
     public Book get(int id) {
         return this.books.get(id);
     }
-
-
-    public boolean isEmpty() {
-        return books.isEmpty();
-    }
 }
