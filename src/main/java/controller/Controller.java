@@ -52,7 +52,6 @@ public class Controller {
         return MAIN_CONTROLLER;
     }
 
-
     public void start() {
         ANSI.printBlue("Controller.start()");
 
@@ -80,10 +79,17 @@ public class Controller {
         if (database.check()) {
             initiate();
             return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "La conexión es válida pero no existe la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-            return false;
         }
+        return false;
+    }
+
+    public static boolean setSQLiteConfig(File file) {
+        database = new Database(file);
+        if (database.check()) {
+            initiate();
+            return true;
+        }
+        return false;
     }
 
     // Use case: Add book
