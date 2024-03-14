@@ -5,10 +5,7 @@ import com.google.gson.JsonObject;
 import model.book.Book;
 import model.book.Books;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class BookDAOSQLite implements BookDAO {
@@ -86,7 +83,24 @@ public class BookDAOSQLite implements BookDAO {
     }
 
     public boolean create(Book book) {
-        return false;
+        String query = "INSERT INTO books(title, author) VALUES(?,?)";
+        try (PreparedStatement ps = this.connection.prepareStatement(query)) {
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+
+            ps.executeUpdate();
+
+            ResultSet keys = ps.getGeneratedKeys();
+            while (keys.next()) {
+                int id = keys.getInt(1);
+                System.out.println(id);
+                book.setId(id);
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
