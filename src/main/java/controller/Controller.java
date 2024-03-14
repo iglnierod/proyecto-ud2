@@ -5,15 +5,18 @@ import model.book.Book;
 import model.book.Books;
 import model.book.dao.BookDAO;
 import model.book.dao.BookDAOMySQL;
+import model.book.dao.BookDAOSQLite;
 import model.database.Database;
 import model.member.Member;
 import model.member.Members;
 import model.member.dao.MemberDAO;
 import model.member.dao.MemberDAOMySQL;
+import model.member.dao.MemberDAOSQLite;
 import model.rent.Rent;
 import model.rent.Rents;
 import model.rent.dao.RentsDAO;
 import model.rent.dao.RentsDAOMySQL;
+import model.rent.dao.RentsDAOSQLite;
 import utils.ANSI;
 import utils.JSON;
 import view.DatabaseConfigView;
@@ -22,6 +25,7 @@ import view.MainView;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -65,9 +69,22 @@ public class Controller {
 
     private static void initiate() {
         mainView.setVisible(true);
-        bookDAO = new BookDAOMySQL(database.getConnection());
-        memberDAO = new MemberDAOMySQL(database.getConnection());
-        rentsDAO = new RentsDAOMySQL(database.getConnection());
+        Connection connection = database.getConnection();
+        switch (database.getEngine()) {
+            case mysql -> {
+                bookDAO = new BookDAOMySQL(connection);
+                memberDAO = new MemberDAOMySQL(connection);
+                rentsDAO = new RentsDAOMySQL(connection);
+            }
+            case sqlite -> {
+                bookDAO = new BookDAOSQLite(connection);
+                memberDAO = new MemberDAOSQLite(connection);
+                rentsDAO = new RentsDAOSQLite(connection);
+            }
+        }
+        /*System.out.println(bookDAO.getAll());
+        System.out.println(memberDAO.getAll());
+        System.out.println(rentsDAO.getAll());*/
         books.load(bookDAO.getAll());
         members.load(memberDAO.getAll());
         rents.load(rentsDAO.getAll());

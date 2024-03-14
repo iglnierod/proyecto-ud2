@@ -71,7 +71,7 @@ public class Database implements Serializable {
             db = (Database) objectInputStream.readObject();
             db.setConfigLoaded(true);
             if (db.isConnectionValid()) {
-                if (!db.isCreated()) {
+                if (!db.isCreated() && db.engine == Engine.mysql) {
                     db.createDatabase();
                 }
                 return db;
@@ -133,6 +133,7 @@ public class Database implements Serializable {
                     existingTables.add(rs.getString(1));
                 }
                 if (!existingTables.containsAll(Set.of(TABLES))) {
+                    System.out.println("if (!existingTables.containsAll(Set.of(TABLES))) {");
                     createDatabase();
                 }
                 return true;
@@ -165,8 +166,10 @@ public class Database implements Serializable {
             ANSI.printBlue("isCreated(): true");
 
         } catch (SQLException e) {
-            System.err.println("isCreated(): false - " + e.getMessage());
-            createDatabase();
+            if (engine == Engine.mysql) {
+                System.err.println("isCreated(): false - " + e.getMessage());
+                createDatabase();
+            }
         }
         return false;
     }
@@ -285,5 +288,7 @@ public class Database implements Serializable {
                 '}';
     }
 
-
+    public Engine getEngine() {
+        return engine;
+    }
 }

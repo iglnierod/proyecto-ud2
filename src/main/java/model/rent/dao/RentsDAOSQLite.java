@@ -5,8 +5,7 @@ import com.google.gson.JsonObject;
 import model.rent.Rent;
 import model.rent.Rents;
 
-import java.sql.Connection;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -19,7 +18,25 @@ public class RentsDAOSQLite implements RentsDAO {
 
     @Override
     public ArrayList<Rent> getAll() {
-        return null;
+        String query = "SELECT * FROM rents";
+        ArrayList<Rent> rentsList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                Rent r = new Rent();
+                r.setUuid(UUID.fromString(rs.getString("uuid")));
+                r.setBookID(rs.getInt("id_book"));
+                r.setMemberID(rs.getString("id_member"));
+                r.setBeginningDate(rs.getString("beginning"));
+                r.setEndingDate(rs.getString("ending"));
+
+                rentsList.add(r);
+            }
+            return rentsList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
