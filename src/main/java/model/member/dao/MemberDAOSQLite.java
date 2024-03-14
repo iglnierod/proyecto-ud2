@@ -1,13 +1,11 @@
 package model.member.dao;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import model.member.Member;
 import model.member.Members;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class MemberDAOSQLite implements MemberDAO {
@@ -45,8 +43,20 @@ public class MemberDAOSQLite implements MemberDAO {
 
     @Override
     public boolean create(Member member) {
-        return false;
+        String query = "INSERT INTO members(id, name, email) VALUES(?,?,?)";
+        try (PreparedStatement ps = this.connection.prepareStatement(query)) {
+            ps.setString(1, member.getId());
+            ps.setString(2, member.getName());
+            ps.setString(3, member.getEmail());
+
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
 
     @Override
     public void update(Member member) {
@@ -60,17 +70,34 @@ public class MemberDAOSQLite implements MemberDAO {
 
     @Override
     public JsonArray export() {
-        return null;
+        JsonArray membersArray = new JsonArray();
+        for (Member m : getAll()) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("id", m.getId());
+            jsonObject.addProperty("name", m.getName());
+            jsonObject.addProperty("email", m.getEmail());
+            membersArray.add(jsonObject);
+        }
+        return membersArray;
     }
 
     @Override
-    public Members importData(ArrayList<Member> members) {
-        return null;
+    public Members importData(ArrayList<Member> membersList) {
+        Members members = new Members();
+        for (Member m : membersList) {
+            create(m);
+            members.add(m);
+        }
+        return members;
     }
 
     @Override
     public void emptyTable() {
-
+        String query = "DELETE FROM members";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }

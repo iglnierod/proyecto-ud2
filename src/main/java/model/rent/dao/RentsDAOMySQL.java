@@ -96,7 +96,6 @@ public class RentsDAOMySQL implements RentsDAO {
 
     @Override
     public boolean end(UUID uuid, Timestamp now) {
-
         String query = "UPDATE rents SET ending = ? WHERE uuid = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setString(1, now.toString());
