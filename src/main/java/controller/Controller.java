@@ -5,15 +5,18 @@ import model.book.Book;
 import model.book.Books;
 import model.book.dao.BookDAO;
 import model.book.dao.BookDAOMySQL;
+import model.book.dao.BookDAOSQLite;
 import model.database.Database;
 import model.member.Member;
 import model.member.Members;
 import model.member.dao.MemberDAO;
 import model.member.dao.MemberDAOMySQL;
+import model.member.dao.MemberDAOSQLite;
 import model.rent.Rent;
 import model.rent.Rents;
 import model.rent.dao.RentsDAO;
 import model.rent.dao.RentsDAOMySQL;
+import model.rent.dao.RentsDAOSQLite;
 import utils.ANSI;
 import utils.JSON;
 import view.DatabaseConfigView;
@@ -22,6 +25,7 @@ import view.MainView;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -52,9 +56,6 @@ public class Controller {
         return MAIN_CONTROLLER;
     }
 
-
-
-
     public void start() {
         ANSI.printBlue("Controller.start()");
 
@@ -68,9 +69,22 @@ public class Controller {
 
     private static void initiate() {
         mainView.setVisible(true);
-        bookDAO = new BookDAOMySQL(database.getConnection());
-        memberDAO = new MemberDAOMySQL(database.getConnection());
-        rentsDAO = new RentsDAOMySQL(database.getConnection());
+        Connection connection = database.getConnection();
+        switch (database.getEngine()) {
+            case mysql -> {
+                bookDAO = new BookDAOMySQL(connection);
+                memberDAO = new MemberDAOMySQL(connection);
+                rentsDAO = new RentsDAOMySQL(connection);
+            }
+            case sqlite -> {
+                bookDAO = new BookDAOSQLite(connection);
+                memberDAO = new MemberDAOSQLite(connection);
+                rentsDAO = new RentsDAOSQLite(connection);
+            }
+        }
+        /*System.out.println(bookDAO.getAll());
+        System.out.println(memberDAO.getAll());
+        System.out.println(rentsDAO.getAll());*/
         books.load(bookDAO.getAll());
         members.load(memberDAO.getAll());
         rents.load(rentsDAO.getAll());
@@ -79,19 +93,18 @@ public class Controller {
 
     public static boolean setMySqlConfig(String host, int port, String user, String password, String databaseName) {
         database = new Database(host, port, user, password, databaseName);
-        if (database.isConnectionValid()) {
-            if (database.isCreated()) {
-                initiate();
-                return true;
-            } else {
-                if (database.createDatabase()) {
-                    initiate();
-                    return true;
-                } else {
-                    JOptionPane.showMessageDialog(null, "La conexión es válida pero no existe la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-            }
+        if (database.check()) {
+            initiate();
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean setSQLiteConfig(File file) {
+        database = new Database(file);
+        if (database.check()) {
+            initiate();
+            return true;
         }
         return false;
     }
@@ -148,12 +161,13 @@ public class Controller {
     }
 
     public static boolean isBooksEmpty() {
-        return books.isEmpty();
+        return bookDAO.getAvailable().isEmpty();
     }
 
     public static boolean isMembersEmpty() {
         return members.isEmpty();
     }
+
     // Use case: end rent
     public static boolean isRentsEmpty() {
         return rents.isEmpty();

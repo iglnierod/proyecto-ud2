@@ -39,22 +39,15 @@ public class StartRentView extends JDialog {
         this.parent = frame;
         this.step = 1;
 
-        if (Controller.isBooksEmpty() || Controller.isMembersEmpty()) {
-            JOptionPane.showMessageDialog(parent, "No hay miembros o libros disponibles para realizar un préstamo",
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         header();
         tableBooks();
         buttons();
 
         if (Controller.isBooksEmpty() || Controller.isMembersEmpty()) {
-            JOptionPane.showMessageDialog(parent, "No hay miembros o libros disponibles para realizar un préstamo",
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else {
-            this.setVisible(true);
+            return;
         }
+        System.out.println(true);
+        this.setVisible(true);
     }
 
     private void header() {

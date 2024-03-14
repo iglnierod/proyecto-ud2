@@ -40,3 +40,4 @@ build/
 config.bin
 library.sqlite
 export.json
+*.bak
