@@ -9,6 +9,7 @@ import utils.ANSI;
 import java.io.*;
 import java.sql.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Database implements Serializable {
@@ -57,7 +58,12 @@ public class Database implements Serializable {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(CONFIG_FILE))) {
             db = (Database) objectInputStream.readObject();
             db.setConfigLoaded(true);
-            return db;
+            if (db.isConnectionValid()) {
+                if (!db.isCreated()) {
+                    db.createDatabase();
+                }
+                return db;
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -70,7 +76,7 @@ public class Database implements Serializable {
         try {
             Connection con = DriverManager.getConnection(url, getUser(), getPassword());
             Statement stmt = con.createStatement();
-            stmt.executeUpdate("USE " + (getDatabaseName().equals("") ? NAME : getDatabaseName()));
+            stmt.executeUpdate("USE " + (getDatabaseName().isEmpty() ? NAME : getDatabaseName()));
             return con;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,31 +96,31 @@ public class Database implements Serializable {
     }
 
     public boolean isCreated() {
-        String url = String.format("jdbc:mysql://%s:%d/%s", getHost(), getPort(), Database.NAME);
-        try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
-            Set<String> existingTables = getExistingTables(con);
-            if (existingTables.containsAll(Set.of(TABLES))) {
-                System.err.println("isCreated(): true");
-                return true;
-            } else {
-                System.err.println("isCreated(): false - Not all tables exist.");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("isCreated(): false - " + e.getMessage());
-            return false;
-        }
-    }
-
-    private Set<String> getExistingTables(Connection con) throws SQLException {
-        Set<String> existingTables = new HashSet<>();
-        try (Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("SHOW TABLES")) {
+        String url = String.format("jdbc:mysql://%s:%d/", getHost(), getPort());
+        Connection con = null;
+        try {
+            con = DriverManager.getConnection(url, getUser(), getPassword());
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("USE " + NAME);
+            ResultSet rs = stmt.executeQuery("SHOW TABLES;");
+            Set<String> existingTables = new LinkedHashSet<>();
             while (rs.next()) {
                 existingTables.add(rs.getString(1));
             }
+
+            if (!existingTables.containsAll(Set.of(TABLES))) {
+                throw new SQLException();
+            }
+
+            stmt.close();
+            con.close();
+            ANSI.printBlue("isCreated(): true");
+
+        } catch (SQLException e) {
+            System.err.println("isCreated(): false - " + e.getMessage());
+            createDatabase();
         }
-        return existingTables;
+        return false;
     }
 
     public boolean createDatabase() {
@@ -146,6 +152,16 @@ public class Database implements Serializable {
             //e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean check() {
+        if (isConnectionValid()) {
+            if (!isCreated()) {
+                createDatabase();
+            }
+            return true;
+        }
+        return false;
     }
 
     // GETTERS & SETTERS

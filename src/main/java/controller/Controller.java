@@ -53,8 +53,6 @@ public class Controller {
     }
 
 
-
-
     public void start() {
         ANSI.printBlue("Controller.start()");
 
@@ -79,21 +77,13 @@ public class Controller {
 
     public static boolean setMySqlConfig(String host, int port, String user, String password, String databaseName) {
         database = new Database(host, port, user, password, databaseName);
-        if (database.isConnectionValid()) {
-            if (database.isCreated()) {
-                initiate();
-                return true;
-            } else {
-                if (database.createDatabase()) {
-                    initiate();
-                    return true;
-                } else {
-                    JOptionPane.showMessageDialog(null, "La conexión es válida pero no existe la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-            }
+        if (database.check()) {
+            initiate();
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "La conexión es válida pero no existe la base de datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return false;
     }
 
     // Use case: Add book
@@ -154,6 +144,7 @@ public class Controller {
     public static boolean isMembersEmpty() {
         return members.isEmpty();
     }
+
     // Use case: end rent
     public static boolean isRentsEmpty() {
         return rents.isEmpty();
