@@ -1,6 +1,9 @@
 ## Proyecto UD2 - Bases de datos
 
-### Todos los apartados hechos
+### Apartados hechos:
+- Obligatorios: todos
+- Opcionales:
+  - Importar/Exportar json
 
 #### Comentarios:
 - Al ejecutar la aplicación utilizando SQLite tarda demasiado en ejecutarse
