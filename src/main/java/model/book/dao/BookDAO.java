@@ -25,7 +25,7 @@ public interface BookDAO {
 
     public JsonArray export();
 
-    Books importData(ArrayList<Book> books);
+    Books importData(ArrayList<Book> booksList);
 
     void emptyTable();
 }

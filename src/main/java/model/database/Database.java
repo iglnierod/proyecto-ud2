@@ -1,6 +1,5 @@
 package model.database;
 
-import model.book.Book;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
@@ -8,7 +7,6 @@ import utils.ANSI;
 
 import java.io.*;
 import java.sql.*;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,11 +23,25 @@ public class Database implements Serializable {
     private static final File CONFIG_FILE = new File("config.bin");
     private boolean configLoaded;
 
+    // SQLite
+    private File SQLiteFile;
+    private Engine engine;
+
     public Database() {
 
     }
 
+    public Database(File SQLiteFile) {
+        this.engine = Engine.sqlite;
+
+        this.SQLiteFile = SQLiteFile;
+        if (isConnectionValid())
+            createConfigFile();
+    }
+
     public Database(String host, int port, String user, String password, String databaseName) {
+        this.engine = Engine.mysql;
+
         this.host = host;
         this.port = port;
         this.user = user;
@@ -59,7 +71,7 @@ public class Database implements Serializable {
             db = (Database) objectInputStream.readObject();
             db.setConfigLoaded(true);
             if (db.isConnectionValid()) {
-                if (!db.isCreated()) {
+                if (!db.isCreated() && db.engine == Engine.mysql) {
                     db.createDatabase();
                 }
                 return db;
@@ -72,27 +84,64 @@ public class Database implements Serializable {
     }
 
     public Connection getConnection() {
-        String url = String.format("jdbc:mysql://%s:%d/%s", getHost(), getPort(), getDatabaseName());
-        try {
-            Connection con = DriverManager.getConnection(url, getUser(), getPassword());
-            Statement stmt = con.createStatement();
-            stmt.executeUpdate("USE " + (getDatabaseName().isEmpty() ? NAME : getDatabaseName()));
-            return con;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        switch (engine) {
+            case mysql -> {
+                String url = String.format("jdbc:mysql://%s:%d/%s", getHost(), getPort(), getDatabaseName());
+                try {
+                    Connection con = DriverManager.getConnection(url, getUser(), getPassword());
+                    Statement stmt = con.createStatement();
+                    stmt.executeUpdate("USE " + (getDatabaseName().isEmpty() ? NAME : getDatabaseName()));
+                    return con;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+            case sqlite -> {
+                String url = String.format("jdbc:sqlite:%s", SQLiteFile.getAbsolutePath());
+                try {
+                    return DriverManager.getConnection(url, getUser(), getPassword());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+            default -> {
+                return null;
+            }
         }
-        return null;
     }
 
     public boolean isConnectionValid() {
-        String url = String.format("jdbc:mysql://%s:%d", getHost(), getPort());
-        try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
-            ANSI.printBlue("isConnectionValid(): Conexión válida");
-            return true;
-        } catch (SQLException e) {
-            System.err.println("isConnectionValid(): Conexión no válida");
-            return false;
+        if (engine == Engine.mysql) {
+            String url = String.format("jdbc:mysql://%s:%d", getHost(), getPort());
+            try (Connection con = DriverManager.getConnection(url, getUser(), getPassword())) {
+                ANSI.printBlue("isConnectionValid(): Conexión válida");
+                return true;
+            } catch (SQLException e) {
+                System.err.println("isConnectionValid(): Conexión no válida");
+                return false;
+            }
         }
+
+        if (engine == Engine.sqlite) {
+            String url = String.format("jdbc:sqlite:%s", SQLiteFile.getAbsolutePath());
+            try (Connection con = DriverManager.getConnection(url)) {
+                ResultSet rs = con.createStatement().executeQuery("SELECT name FROM sqlite_master WHERE type = 'table'");
+                Set<String> existingTables = new LinkedHashSet<>();
+                while (rs.next()) {
+                    existingTables.add(rs.getString(1));
+                }
+                if (!existingTables.containsAll(Set.of(TABLES))) {
+                    System.out.println("if (!existingTables.containsAll(Set.of(TABLES))) {");
+                    createDatabase();
+                }
+                return true;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
     }
 
     public boolean isCreated() {
@@ -117,8 +166,10 @@ public class Database implements Serializable {
             ANSI.printBlue("isCreated(): true");
 
         } catch (SQLException e) {
-            System.err.println("isCreated(): false - " + e.getMessage());
-            createDatabase();
+            if (engine == Engine.mysql) {
+                System.err.println("isCreated(): false - " + e.getMessage());
+                createDatabase();
+            }
         }
         return false;
     }
@@ -126,11 +177,19 @@ public class Database implements Serializable {
     public boolean createDatabase() {
         System.out.println("createDatabase()");
         try {
-            Connection connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d", getHost(), getPort()), "root", "abc123.");
-            String path = "library.sql";
+            Connection connection = null;
+            String path = null;
+            if (engine == Engine.mysql) {
+                connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%d", getHost(), getPort()), "root", "abc123.");
+                path = "scripts\\create-library-MySQL.sql";
+            }
+            if (engine == Engine.sqlite) {
+                connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", SQLiteFile.getAbsolutePath()));
+                path = "scripts\\create-library-SQLite.sql";
+            }
             boolean continueOrError = false;
             boolean ignoreFailedDrops = false;
-            String commentPrefix = "#";
+            String commentPrefix = "//";
             String separator = ";";
             String blockCommentStartDelimiter = "/*";
             String blockCommentEndDelimiter = "*/";
@@ -229,5 +288,7 @@ public class Database implements Serializable {
                 '}';
     }
 
-
+    public Engine getEngine() {
+        return engine;
+    }
 }

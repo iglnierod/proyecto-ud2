@@ -98,7 +98,9 @@ public class DatabaseConfigView extends JFrame {
             }
 
             if (engine.equals("sqlite")) {
-                // TODO
+                if (Controller.setSQLiteConfig(new File(sqlitePathFile))) {
+
+                }
             }
         });
 
@@ -197,6 +199,7 @@ public class DatabaseConfigView extends JFrame {
                 java.io.File selectedFile = fileChooser.getSelectedFile();
                 sqlitePathFile = selectedFile.getAbsolutePath();
                 System.out.println("Archivo seleccionado: " + sqlitePathFile);
+                sqliteLabel.setText(sqlitePathFile);
             }
         });
 
