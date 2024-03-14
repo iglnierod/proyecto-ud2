@@ -90,10 +90,9 @@ public class BookDAOSQLite implements BookDAO {
 
             ps.executeUpdate();
 
-            ResultSet keys = ps.getGeneratedKeys();
+            ResultSet keys = this.connection.createStatement().executeQuery("SELECT last_insert_rowid()");
             while (keys.next()) {
                 int id = keys.getInt(1);
-                System.out.println(id);
                 book.setId(id);
             }
             return true;
@@ -105,7 +104,16 @@ public class BookDAOSQLite implements BookDAO {
 
     @Override
     public void createWithID(Book book) {
+        String query = "INSERT INTO books(id, title, author) VALUES(?,?,?)";
+        try (PreparedStatement ps = this.connection.prepareStatement(query)) {
+            ps.setInt(1, book.getId());
+            ps.setString(2, book.getTitle());
+            ps.setString(3, book.getAuthor());
 
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(Book book) {
@@ -118,17 +126,35 @@ public class BookDAOSQLite implements BookDAO {
 
     @Override
     public JsonArray export() {
-        return null;
+        JsonArray booksArray = new JsonArray();
+        for (Book b : getAll()) {
+            JsonObject bookObject = new JsonObject();
+            bookObject.addProperty("id", b.getId());
+            bookObject.addProperty("title", b.getTitle());
+            bookObject.addProperty("author", b.getAuthor());
+            booksArray.add(bookObject);
+        }
+        return booksArray;
     }
 
     @Override
-    public Books importData(ArrayList<Book> books) {
-        return null;
+    public Books importData(ArrayList<Book> booksList) {
+        Books books = new Books();
+        for (Book b : booksList) {
+            createWithID(b);
+            books.add(b);
+        }
+        return books;
     }
 
     @Override
     public void emptyTable() {
-
+        String query = "DELETE FROM books";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
