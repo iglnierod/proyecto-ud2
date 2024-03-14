@@ -52,7 +52,6 @@ public class Controller {
         return MAIN_CONTROLLER;
     }
 
-
     public void start() {
         ANSI.printBlue("Controller.start()");
 
