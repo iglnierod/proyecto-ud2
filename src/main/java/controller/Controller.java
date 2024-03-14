@@ -82,9 +82,6 @@ public class Controller {
                 rentsDAO = new RentsDAOSQLite(connection);
             }
         }
-        /*System.out.println(bookDAO.getAll());
-        System.out.println(memberDAO.getAll());
-        System.out.println(rentsDAO.getAll());*/
         books.load(bookDAO.getAll());
         members.load(memberDAO.getAll());
         rents.load(rentsDAO.getAll());

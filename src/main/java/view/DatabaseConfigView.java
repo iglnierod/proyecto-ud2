@@ -98,8 +98,8 @@ public class DatabaseConfigView extends JFrame {
             }
 
             if (engine.equals("sqlite")) {
-                if (Controller.setSQLiteConfig(new File(sqlitePathFile))) {
-
+                if (!Controller.setSQLiteConfig(new File(sqlitePathFile))) {
+                    JOptionPane.showMessageDialog(this, "No se ha podido conectar a SQLite", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
