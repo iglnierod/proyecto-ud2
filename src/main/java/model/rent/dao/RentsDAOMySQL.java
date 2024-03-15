@@ -60,8 +60,11 @@ public class RentsDAOMySQL implements RentsDAO {
                 rentedItem.add(rs.getString("name"));
                 rentedItem.add(rs.getString("email"));
                 rentedItem.add(rs.getString("beginning"));
-                rentedItem.add(rs.getString("ending") == null ? "NULL" : rs.getString("ending"));
-
+                String endingDate = rs.getString("ending");
+                if (endingDate == null) {
+                    endingDate = "NULL";
+                }
+                rentedItem.add(endingDate);
                 rentedList.add(rentedItem);
             }
             return rentedList;
@@ -96,6 +99,7 @@ public class RentsDAOMySQL implements RentsDAO {
 
     @Override
     public boolean end(UUID uuid, Timestamp now) {
+        System.out.println("end() ending: " + now);
         String query = "UPDATE rents SET ending = ? WHERE uuid = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setString(1, now.toString());

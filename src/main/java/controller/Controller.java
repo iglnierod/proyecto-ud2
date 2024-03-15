@@ -140,7 +140,7 @@ public class Controller {
         return members.getMembersTableModel(memberDAO.getAll());
     }
 
-    // Use case: rent book
+    // Use case: rent bookñ
     public static void setSelectedBookID(int selectedBookID) {
         Controller.selectedBookID = selectedBookID;
     }
@@ -151,6 +151,7 @@ public class Controller {
 
     public static void rentBook() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
+        System.out.println("beginning: " + now);
         Rent rent = new Rent(selectedBookID, selectedMemberID, now, null);
         if (rentsDAO.create(rent)) {
             rents.add(rent);
@@ -174,8 +175,10 @@ public class Controller {
         System.out.println(rents.get(uuid));
         if (rents.exists(uuid) && rents.get(uuid).getEndingDate() == null) {
             Timestamp now = new Timestamp(System.currentTimeMillis());
+            System.out.println("engind: " + now);
             if (rentsDAO.end(uuid, now)) {
                 rents.get(uuid).setEndingDate(now.toString());
+                System.out.println(rents.get(uuid));
                 return true;
             }
         }

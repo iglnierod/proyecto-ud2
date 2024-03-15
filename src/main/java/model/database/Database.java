@@ -164,7 +164,7 @@ public class Database implements Serializable {
             stmt.close();
             con.close();
             ANSI.printBlue("isCreated(): true");
-
+            return true;
         } catch (SQLException e) {
             if (engine == Engine.mysql) {
                 System.err.println("isCreated(): false - " + e.getMessage());
